@@ -104,11 +104,18 @@ async function queryMatches(db: DB, where: SQL | undefined, limit: number, order
     .where(where)
     .orderBy(order === "asc" ? asc(matches.kickoff) : desc(matches.kickoff))
     .limit(limit)
+  const now = Date.now()
   return rows.map((r) => ({
     id: r.m.id,
     leagueId: r.m.leagueId,
     status: r.m.status,
     minute: r.m.minute,
+    period: r.m.period,
+    clockSeconds: r.m.clockSeconds,
+    clockDisplay: r.m.clockDisplay,
+    // How old the clock reading is right now. Clients add their own elapsed time,
+    // which avoids depending on the client's and server's clocks agreeing.
+    clockAgeMs: Math.max(0, now - r.m.updatedAt.getTime()),
     kickoff: r.m.kickoff.toISOString(),
     venue: r.m.venue,
     homeScore: r.m.homeScore,

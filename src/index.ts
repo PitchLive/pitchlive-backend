@@ -2,7 +2,6 @@ import { buildApp } from "./app.js"
 import { loadConfig } from "./config.js"
 import { openDatabase } from "./db/client.js"
 import { isSeeded, seed } from "./db/seed.js"
-import { seedDemoMatches } from "./jobs/demo.js"
 import { startJobs } from "./jobs/scheduler.js"
 import { LiveHub } from "./live/hub.js"
 
@@ -12,9 +11,8 @@ const hub = new LiveHub()
 const app = await buildApp({ db, config, hub }, { logger: { level: config.NODE_ENV === "test" ? "warn" : "info" } })
 
 if (!(await isSeeded(db))) app.log.info(await seed(db), "database seeded from snapshot")
-if (config.DEMO_MATCHES) await seedDemoMatches(db, config.DEMO_STREAM_URL)
 
-const stopJobs = startJobs({ db, hub, log: app.log, espn: config.ESPN_SYNC, demo: config.DEMO_MATCHES })
+const stopJobs = startJobs({ db, hub, log: app.log, espn: config.ESPN_SYNC })
 
 for (const signal of ["SIGINT", "SIGTERM"] as const)
   process.once(signal, async () => {

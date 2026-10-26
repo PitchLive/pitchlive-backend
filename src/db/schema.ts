@@ -67,7 +67,7 @@ export type MatchStatus = (typeof matchStatuses)[number]
 export const matches = pgTable(
   "matches",
   {
-    id: text("id").primaryKey(), // "espn-<event id>" or "demo-<n>"
+    id: text("id").primaryKey(), // "espn-<event id>"
     espnId: text("espn_id").unique(),
     leagueId: text("league_id").references(() => leagues.id),
     homeId: text("home_id")
@@ -80,6 +80,10 @@ export const matches = pgTable(
     awayScore: integer("away_score").notNull().default(0),
     status: text("status").$type<MatchStatus>().notNull(),
     minute: integer("minute"),
+    // ESPN match clock as of updatedAt, so clients can tick it forward between syncs.
+    period: integer("period"),
+    clockSeconds: integer("clock_seconds"),
+    clockDisplay: text("clock_display"), // e.g. "67'", "90'+3'"
     kickoff: timestamp("kickoff", { withTimezone: true }).notNull(),
     venue: text("venue"),
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),

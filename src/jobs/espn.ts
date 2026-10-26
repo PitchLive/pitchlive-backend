@@ -54,26 +54,40 @@ async function resolveTeams(db: DB, espnTeams: EspnTeam[], leagueId: string | nu
 type EspnEvent = {
   id: string
   date: string
-  status: { displayClock?: string; type: { name: string; state: "pre" | "in" | "post" } }
+  status: { clock?: number; displayClock?: string; period?: number; type: { name: string; state: "pre" | "in" | "post" } }
   competitions: { venue?: { fullName?: string }; competitors: { homeAway: "home" | "away"; score?: string; team: EspnTeam }[] }[]
 }
 
-export function mapStatus(s: EspnEvent["status"]): { status: MatchStatus; minute: number | null } {
+type Clock = { status: MatchStatus; minute: number | null; period: number | null; clockSeconds: number | null; clockDisplay: string | null }
+
+export function mapStatus(s: EspnEvent["status"]): Clock {
   const name = s.type.name
-  if (/POSTPONED|CANCELED|ABANDONED|SUSPENDED|DELAYED/.test(name)) return { status: "POSTPONED", minute: null }
-  if (s.type.state === "pre") return { status: "UPCOMING", minute: null }
-  if (s.type.state === "post") return { status: "FT", minute: null }
-  if (name === "STATUS_HALFTIME") return { status: "HT", minute: 45 }
+  const none = { minute: null, period: null, clockSeconds: null, clockDisplay: null }
+  if (/POSTPONED|CANCELED|ABANDONED|SUSPENDED|DELAYED/.test(name)) return { status: "POSTPONED", ...none }
+  if (s.type.state === "pre") return { status: "UPCOMING", ...none }
+  if (s.type.state === "post") return { status: "FT", ...none }
+  const period = s.period ?? null
+  const clockSeconds = typeof s.clock === "number" ? Math.floor(s.clock) : null
+  const clockDisplay = s.displayClock ?? null
+  if (name === "STATUS_HALFTIME") return { status: "HT", minute: 45, period, clockSeconds, clockDisplay }
   const minute = parseInt(s.displayClock ?? "", 10)
-  return { status: "LIVE", minute: Number.isFinite(minute) ? minute : null }
+  return { status: "LIVE", minute: Number.isFinite(minute) ? minute : null, period, clockSeconds, clockDisplay }
 }
 
 const ymd = (d: Date) => d.toISOString().slice(0, 10).replaceAll("-", "")
 
-/** Upserts yesterday/today/tomorrow fixtures for every league. Returns ids of matches that changed. */
-export async function syncScoreboards(db: DB, fetcher: Fetcher = defaultFetcher, now = new Date()) {
-  const allLeagues = await db.select({ id: leagues.id }).from(leagues)
-  const days = [-1, 0, 1].map((o) => ymd(new Date(now.getTime() + o * 86_400_000)))
+/**
+ * Upserts fixtures from ESPN scoreboards and returns the ids of matches that changed.
+ * Defaults to every league for yesterday/today/tomorrow; the live loop narrows both.
+ */
+export async function syncScoreboards(
+  db: DB,
+  fetcher: Fetcher = defaultFetcher,
+  now = new Date(),
+  opts: { leagues?: string[]; days?: number[] } = {},
+) {
+  const allLeagues = opts.leagues ? opts.leagues.map((id) => ({ id })) : await db.select({ id: leagues.id }).from(leagues)
+  const days = (opts.days ?? [-1, 0, 1]).map((o) => ymd(new Date(now.getTime() + o * 86_400_000)))
   const changed: string[] = []
 
   for (const { id: leagueId } of allLeagues) {
@@ -90,7 +104,6 @@ export async function syncScoreboards(db: DB, fetcher: Fetcher = defaultFetcher,
         const a = comp?.competitors.find((c) => c.homeAway === "away")
         if (!comp || !h || !a) continue
         const ids = await resolveTeams(db, [h.team, a.team], leagueId)
-        const { status, minute } = mapStatus(ev.status)
         const row = {
           id: `espn-${ev.id}`,
           espnId: ev.id,
@@ -99,8 +112,7 @@ export async function syncScoreboards(db: DB, fetcher: Fetcher = defaultFetcher,
           awayId: ids.get(a.team.id)!,
           homeScore: Number(h.score ?? 0) || 0,
           awayScore: Number(a.score ?? 0) || 0,
-          status,
-          minute,
+          ...mapStatus(ev.status),
           kickoff: new Date(ev.date),
           venue: comp.venue?.fullName ?? null,
         }
@@ -109,6 +121,8 @@ export async function syncScoreboards(db: DB, fetcher: Fetcher = defaultFetcher,
           !prev ||
           prev.status !== row.status ||
           prev.minute !== row.minute ||
+          prev.period !== row.period ||
+          prev.clockSeconds !== row.clockSeconds ||
           prev.homeScore !== row.homeScore ||
           prev.awayScore !== row.awayScore ||
           prev.kickoff.getTime() !== row.kickoff.getTime()

@@ -1,13 +1,12 @@
 import { after, before, describe, it } from "node:test"
 import assert from "node:assert/strict"
-import { seedDemoMatches, tickDemoMatches } from "../src/jobs/demo.js"
-import { ORIGIN, sessionCookie, setup } from "./helpers.js"
+import { ORIGIN, seedFixtures, sessionCookie, setup } from "./helpers.js"
 
 let ctx: Awaited<ReturnType<typeof setup>>
 
 before(async () => {
   ctx = await setup()
-  await seedDemoMatches(ctx.db, ctx.config.DEMO_STREAM_URL)
+  await seedFixtures(ctx.db)
 })
 after(() => ctx.close())
 
@@ -55,7 +54,12 @@ describe("catalog", () => {
   it("filters matches by status and validates input", async () => {
     const res = await ctx.app.inject("/api/matches?status=live,ht")
     assert.equal(res.statusCode, 200)
-    assert.equal(res.json().matches.length, 4)
+    const live = res.json().matches
+    assert.deepEqual(live.map((m: { id: string }) => m.id).sort(), ["fx-1", "fx-2", "fx-3"])
+    const fx1 = live.find((m: { id: string }) => m.id === "fx-1")
+    assert.equal(fx1.clockSeconds, 67 * 60)
+    assert.equal(fx1.period, 2)
+    assert.equal(typeof fx1.clockAgeMs, "number")
     assert.equal((await ctx.app.inject("/api/matches?status=bogus")).statusCode, 400)
     assert.equal((await ctx.app.inject("/api/matches?date=23-10-2026")).statusCode, 400)
   })
@@ -112,14 +116,17 @@ describe("auth", () => {
 })
 
 describe("streaming", () => {
-  it("requires sign-in and returns the configured stream", async () => {
-    assert.equal((await ctx.app.inject("/api/matches/demo-1/playback")).statusCode, 401)
+  it("requires sign-in, returns licensed streams and 404s matches without one", async () => {
+    assert.equal((await ctx.app.inject("/api/matches/fx-1/playback")).statusCode, 401)
     const reg = await ctx.app.inject({ method: "POST", url: "/api/auth/register", payload: { email: "viewer@x.io", password: "longenough1", displayName: "Viewer" } })
     const cookie = sessionCookie(reg)
-    const res = await ctx.app.inject({ url: "/api/matches/demo-1/playback", headers: { cookie } })
+    const res = await ctx.app.inject({ url: "/api/matches/fx-1/playback", headers: { cookie } })
     assert.equal(res.statusCode, 200)
     assert.equal(res.headers["cache-control"], "private, no-store")
-    assert.equal(res.json().playback.demo, true)
+    assert.equal(res.json().playback.url, "https://streams.example.com/fx-1.m3u8")
+    const none = await ctx.app.inject({ url: "/api/matches/fx-2/playback", headers: { cookie } })
+    assert.equal(none.statusCode, 404)
+    assert.equal(none.json().error, "Stream not found")
     assert.equal((await ctx.app.inject({ url: "/api/matches/nope/playback", headers: { cookie } })).statusCode, 404)
   })
 })
@@ -129,20 +136,12 @@ describe("admin", () => {
     assert.equal((await ctx.app.inject({ method: "POST", url: "/api/admin/sync", payload: { job: "seed" } })).statusCode, 401)
     const res = await ctx.app.inject({
       method: "PUT",
-      url: "/api/admin/matches/demo-3/stream",
+      url: "/api/admin/matches/fx-3/stream",
       headers: { authorization: "Bearer test-admin-token-123456" },
       payload: { provider: "hls", source: "https://example.com/live.m3u8", quality: "4K" },
     })
     assert.equal(res.statusCode, 204)
-    const { match } = (await ctx.app.inject("/api/matches/demo-3")).json()
+    const { match } = (await ctx.app.inject("/api/matches/fx-3")).json()
     assert.equal(match.hasStream, true)
-  })
-})
-
-describe("demo simulator", () => {
-  it("advances live matches", async () => {
-    const before = (await ctx.app.inject("/api/matches/demo-2")).json().match.minute
-    await tickDemoMatches(ctx.db, () => 0.5)
-    assert.equal((await ctx.app.inject("/api/matches/demo-2")).json().match.minute, before + 1)
   })
 })
