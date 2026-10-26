@@ -7,8 +7,8 @@ import { leagues, standings, teams } from "./schema.js"
 import { seasonLabel } from "../jobs/espn.js"
 
 const here = path.dirname(fileURLToPath(import.meta.url))
-// Shared with the frontend so both sides agree on league facts.
-const CATALOG_FILE = path.resolve(here, "../../../src/leagueCatalog.json")
+// Curated league facts. Keep in sync with src/leagueCatalog.json in the PitchLive frontend.
+const CATALOG_FILE = path.resolve(here, "../../data/leagueCatalog.json")
 const SNAPSHOT_FILE = path.resolve(here, "../../data/snapshot.json")
 
 type CatalogEntry = {

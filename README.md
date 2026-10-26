@@ -1,19 +1,18 @@
 # PitchLive API
 
-Fastify + TypeScript backend for PitchLive: leagues, clubs, tables, live scores, accounts, favourites, live chat and stream playback.
+Fastify + TypeScript backend for [PitchLive](https://github.com/PitchLive/PitchLive): leagues, clubs, tables, live scores, accounts, favourites, live chat and stream playback.
 
 ## Run it
 
 ```bash
-cd server
 npm install
 cp .env.example .env   # optional; defaults work locally
 npm run dev            # http://localhost:8787
 ```
 
-Then run the frontend (`npm run dev` in the project root). Vite proxies `/api` (HTTP and WebSocket) to the server, so the browser sees one origin and session cookies stay first-party.
+Then run the frontend (`npm run dev` in the PitchLive repo). Its Vite dev server proxies `/api` (HTTP and WebSocket) to the server, so the browser sees one origin and session cookies stay first-party.
 
-No database install is needed: without `DATABASE_URL` the server uses **PGlite** (embedded Postgres) stored in `server/.data/`. For production set `DATABASE_URL` to a real Postgres; migrations run on startup either way. The first boot seeds leagues, clubs and tables from `data/snapshot.json`.
+No database install is needed: without `DATABASE_URL` the server uses **PGlite** (embedded Postgres) stored in `.data/`. For production set `DATABASE_URL` to a real Postgres; migrations run on startup either way. The first boot seeds leagues, clubs and tables from `data/snapshot.json`.
 
 | Script | Does |
 |---|---|
@@ -27,7 +26,7 @@ No database install is needed: without `DATABASE_URL` the server uses **PGlite**
 
 - **Background jobs** (`src/jobs/`): fixtures and scores from ESPN every minute while a match is live (otherwise every 5 minutes), tables every 15 minutes, form and stadiums daily. Score changes are pushed to WebSocket subscribers.
 - **Demo matches** (`DEMO_MATCHES=true`): four simulated live games with the public Mux test stream, so the player and live updates can be built offline. These are not real.
-- Team ids match the frontend (`ars`, `esp-96`, `t-1929`). `npm run data:leagues` in the project root refreshes both the frontend data and `data/snapshot.json`.
+- Team ids match the frontend (`ars`, `esp-96`, `t-1929`). The seed files come from the frontend repo: `npm run data:leagues` there regenerates `server/data/snapshot.json`. Copy it and `src/leagueCatalog.json` into this repo's `data/` folder to update them.
 
 ## API
 
