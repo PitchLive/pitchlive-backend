@@ -3,7 +3,7 @@ import assert from "node:assert/strict"
 import { eq, inArray } from "drizzle-orm"
 import { matches, standings, teams } from "../src/db/schema.js"
 import { mapStatus, syncScoreboards, syncStandings } from "../src/jobs/espn.js"
-import { leaguesInPlay } from "../src/jobs/scheduler.js"
+import { TableRechecks, leaguesInPlay } from "../src/jobs/scheduler.js"
 import { setup } from "./helpers.js"
 
 let ctx: Awaited<ReturnType<typeof setup>>
@@ -125,11 +125,24 @@ describe("ESPN sync", () => {
         ],
       }
     }
-    assert.equal(await syncStandings(ctx.db, fetcher), 1)
+    assert.deepEqual(await syncStandings(ctx.db, fetcher), ["sco.1"], "reports the league whose table changed")
     const after = await ctx.db.select().from(standings).where(eq(standings.leagueId, "sco.1"))
     assert.equal(after.length, 2)
     const top = after.find((r) => r.position === 1)!
     assert.equal(top.teamId, tb!.id, "re-sorted by points")
     assert.equal(top.form, b!.form, "form preserved")
+    assert.deepEqual(await syncStandings(ctx.db, fetcher, { leagues: ["sco.1"] }), [], "an unchanged table is not reported")
+  })
+
+  it("re-checks a league's table a few times after one of its matches ends", () => {
+    const r = new TableRechecks()
+    const t0 = 1_000_000
+    r.schedule("eng.1", t0)
+    assert.deepEqual(r.take(t0 + 1_000), [], "nothing due straight away")
+    assert.deepEqual(r.take(t0 + 31_000), ["eng.1"], "first check after 30 s")
+    assert.deepEqual(r.take(t0 + 32_000), [], "each due time fires once")
+    assert.deepEqual(r.take(t0 + 3 * 60_000 + 1), ["eng.1"])
+    assert.deepEqual(r.take(t0 + 8 * 60_000 + 1), ["eng.1"])
+    assert.deepEqual(r.take(t0 + 60 * 60_000), [], "done after the last check")
   })
 })

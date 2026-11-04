@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "test": "tsx --test test/*.test.ts",
     "db:generate": "drizzle-kit generate",
-    "db:seed": "tsx --env-file-if-exists=.env src/db/seed-cli.ts"
+    "db:seed": "tsx --env-file-if-exists=.env src/db/seed-cli.ts",
+    "data:catalog": "node scripts/fetch-league-catalog.mjs"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.3.0",

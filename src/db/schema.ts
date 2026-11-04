@@ -14,6 +14,10 @@ export const leagues = pgTable("leagues", {
   logo: text("logo"),
   season: text("season"),
   sortOrder: integer("sort_order").notNull().default(0),
+  // Curated leagues are synced continuously; others are loaded when someone opens them
+  // and kept fresh while they've been viewed recently.
+  featured: boolean("featured").notNull().default(true),
+  lastViewedAt: timestamp("last_viewed_at", { withTimezone: true }),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 })
 

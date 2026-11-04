@@ -20,6 +20,11 @@ describe("catalog", () => {
     assert.equal(epl.name, "Premier League")
     assert.equal(epl.clubCount, 20)
     assert.equal(epl.leaders.length, 1)
+    assert.deepEqual(
+      epl.top.map((r: { position: number }) => r.position),
+      [1, 2, 3],
+    )
+    assert.equal(epl.top[0].team.id, epl.leaders[0].team.id, "top three starts with the leader")
     assert.equal(leagues.find((l: { id: string }) => l.id === "usa.1").leaders.length, 2, "MLS has two conference leaders")
   })
 

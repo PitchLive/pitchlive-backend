@@ -1,0 +1,1902 @@
+[
+ {
+  "slug": "arg.1",
+  "name": "Argentine Liga Profesional de Fútbol",
+  "short": "Argentine LPF",
+  "country": "Argentina",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/1.png"
+ },
+ {
+  "slug": "arg.2",
+  "name": "Argentine Nacional B",
+  "short": "Argentine Nacional B",
+  "country": "Argentina",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2294.png"
+ },
+ {
+  "slug": "arg.3",
+  "name": "Argentine Primera B",
+  "short": "Argentine Primera B",
+  "country": "Argentina",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2308.png"
+ },
+ {
+  "slug": "arg.trofeo_de_la_campeones",
+  "name": "Argentine Trofeo de Campeones",
+  "short": "Argentine Trofeo de Campeones",
+  "country": "Argentina",
+  "season": 2025,
+  "cup": false,
+  "women": false,
+  "logo": null
+ },
+ {
+  "slug": "arg.supercopa",
+  "name": "Argentine Supercopa",
+  "short": "Argentine Supercopa",
+  "country": "Argentina",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2343.png"
+ },
+ {
+  "slug": "arg.supercopa.internacional",
+  "name": "Argentine Supercopa Internacional",
+  "short": "Supercopa Internacional",
+  "country": "Argentina",
+  "season": 2025,
+  "cup": true,
+  "women": false,
+  "logo": null
+ },
+ {
+  "slug": "arg.copa",
+  "name": "Copa Argentina",
+  "short": "Copa Argentina",
+  "country": "Argentina",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2320.png"
+ },
+ {
+  "slug": "aus.1",
+  "name": "Australian A-League Men",
+  "short": "A-League Men",
+  "country": "Australia",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/1308.png"
+ },
+ {
+  "slug": "aus.w.1",
+  "name": "Australian A-League Women",
+  "short": "A-League Women",
+  "country": "Australia",
+  "season": 2026,
+  "cup": false,
+  "women": true,
+  "logo": "http://a.espncdn.com/i/leaguelogos/soccer/500-dark/2402.png"
+ },
+ {
+  "slug": "aut.1",
+  "name": "Austrian Bundesliga",
+  "short": "Austrian Bundesliga",
+  "country": "Austria",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/5.png"
+ },
+ {
+  "slug": "bel.1",
+  "name": "Belgian Pro League",
+  "short": "Belgian Pro League",
+  "country": "Belgium",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/6.png"
+ },
+ {
+  "slug": "bel.promotion.relegation",
+  "name": "Belgian Pro League Promotion/Relegation Playoffs",
+  "short": "Belgian Pro League Pro/Rel",
+  "country": "Belgium",
+  "season": 2025,
+  "cup": false,
+  "women": false,
+  "logo": null
+ },
+ {
+  "slug": "bol.1",
+  "name": "Bolivian Liga Profesional",
+  "short": "Bolivian Liga Profesional",
+  "country": "Bolivia",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/1949.png"
+ },
+ {
+  "slug": "bol.ply.rel",
+  "name": "Bolivian Liga Profesional Promotion/Relegation Playoffs",
+  "short": "Bolivian Liga Pro/Rel",
+  "country": "Bolivia",
+  "season": 2025,
+  "cup": false,
+  "women": false,
+  "logo": null
+ },
+ {
+  "slug": "bol.copa",
+  "name": "Copa Bolivia",
+  "short": "Copa Bolivia",
+  "country": "Bolivia",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": null
+ },
+ {
+  "slug": "bra.1",
+  "name": "Brazilian Serie A",
+  "short": "Brazil Serie A",
+  "country": "Brazil",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/85.png"
+ },
+ {
+  "slug": "bra.2",
+  "name": "Brazilian Serie B",
+  "short": "Brazil Serie B",
+  "country": "Brazil",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2299.png"
+ },
+ {
+  "slug": "bra.camp.carioca",
+  "name": "Brazilian Campeonato Carioca",
+  "short": "Brazil Carioca",
+  "country": "Brazil",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2265.png"
+ },
+ {
+  "slug": "bra.camp.gaucho",
+  "name": "Brazilian Campeonato Gaucho",
+  "short": "Brazil Gaucho",
+  "country": "Brazil",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2272.png"
+ },
+ {
+  "slug": "bra.camp.mineiro",
+  "name": "Brazilian Campeonato Mineiro",
+  "short": "Brazil Mineiro",
+  "country": "Brazil",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2360.png"
+ },
+ {
+  "slug": "bra.camp.paulista",
+  "name": "Brazilian Campeonato Paulista",
+  "short": "Brazil Paulista",
+  "country": "Brazil",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2322.png"
+ },
+ {
+  "slug": "bra.supercopa_do_brazil",
+  "name": "Brazilian Supercopa Rei",
+  "short": "Supercopa Rei",
+  "country": "Brazil",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": null
+ },
+ {
+  "slug": "bra.copa_do_brazil",
+  "name": "Copa do Brasil",
+  "short": "Copa do Brazil",
+  "country": "Brazil",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/528.png"
+ },
+ {
+  "slug": "can.w.nsl",
+  "name": "Northern Super League",
+  "short": "Northern Super League",
+  "country": "Canada",
+  "season": 2026,
+  "cup": false,
+  "women": true,
+  "logo": null
+ },
+ {
+  "slug": "chi.1",
+  "name": "Chilean Primera División",
+  "short": "Chilean Primera",
+  "country": "Chile",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/86.png"
+ },
+ {
+  "slug": "chi.super_cup",
+  "name": "Chilean Supercopa",
+  "short": "Chilean Supercopa",
+  "country": "Chile",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/default-team-logo-500.png&w=100&h=100"
+ },
+ {
+  "slug": "chi.copa_chi",
+  "name": "Copa Chile",
+  "short": "Copa Chile",
+  "country": "Chile",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": "http://a.espncdn.com/i/leaguelogos/soccer/500-dark/2331.png"
+ },
+ {
+  "slug": "chn.1",
+  "name": "Chinese Super League",
+  "short": "Chinese Super League",
+  "country": "China",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2350.png"
+ },
+ {
+  "slug": "col.1",
+  "name": "Colombian Primera A",
+  "short": "Colombian Primera A",
+  "country": "Colombia",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/1543.png"
+ },
+ {
+  "slug": "col.superliga",
+  "name": "Colombian Superliga",
+  "short": "Colombian Superliga",
+  "country": "Colombia",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2405.png"
+ },
+ {
+  "slug": "col.copa",
+  "name": "Copa Colombia",
+  "short": "Copa Colombia",
+  "country": "Colombia",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2332.png"
+ },
+ {
+  "slug": "crc.1",
+  "name": "Costa Rican Primera Division",
+  "short": "Liga FPD",
+  "country": "Costa Rica",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2245.png"
+ },
+ {
+  "slug": "den.1",
+  "name": "Danish Superliga",
+  "short": "Danish Superliga",
+  "country": "Denmark",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/default-team-logo-500.png&w=100&h=100"
+ },
+ {
+  "slug": "ecu.1",
+  "name": "LigaPro Ecuador",
+  "short": "LigaPro Ecuador",
+  "country": "Ecuador",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/1944.png"
+ },
+ {
+  "slug": "slv.1",
+  "name": "Salvadoran Primera Division",
+  "short": "Salvadoran Primera",
+  "country": "El Salvador",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2244.png"
+ },
+ {
+  "slug": "eng.1",
+  "name": "English Premier League",
+  "short": "Premier League",
+  "country": "England",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/23.png"
+ },
+ {
+  "slug": "eng.2",
+  "name": "English League Championship",
+  "short": "EFL Championship",
+  "country": "England",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/24.png"
+ },
+ {
+  "slug": "eng.3",
+  "name": "English League One",
+  "short": "EFL League One",
+  "country": "England",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/25.png"
+ },
+ {
+  "slug": "eng.4",
+  "name": "English League Two",
+  "short": "EFL League Two",
+  "country": "England",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/26.png"
+ },
+ {
+  "slug": "eng.charity",
+  "name": "English FA Community Shield",
+  "short": "Community Shield",
+  "country": "England",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/default-team-logo-500.png&w=100&h=100"
+ },
+ {
+  "slug": "eng.5",
+  "name": "English National League",
+  "short": "National League",
+  "country": "England",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/default-team-logo-500.png&w=100&h=100"
+ },
+ {
+  "slug": "eng.league_cup",
+  "name": "English Carabao Cup",
+  "short": "Carabao Cup",
+  "country": "England",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/41.png"
+ },
+ {
+  "slug": "eng.trophy",
+  "name": "English EFL Trophy",
+  "short": "EFL Trophy",
+  "country": "England",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/42.png"
+ },
+ {
+  "slug": "eng.fa",
+  "name": "English FA Cup",
+  "short": "English FA Cup",
+  "country": "England",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/40.png"
+ },
+ {
+  "slug": "eng.fa_qual",
+  "name": "English FA Cup Qualifying",
+  "short": "English FA Cup Qualifying",
+  "country": "England",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": null
+ },
+ {
+  "slug": "eng.w.1",
+  "name": "English Women's Super League",
+  "short": "Women's Super League",
+  "country": "England",
+  "season": 2026,
+  "cup": false,
+  "women": true,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2314.png"
+ },
+ {
+  "slug": "eng.w.promotion.relegation",
+  "name": "English Women's Super League Promotion/Relegation Playoff",
+  "short": "Women's Super League Pro/Rel",
+  "country": "England",
+  "season": 2025,
+  "cup": false,
+  "women": true,
+  "logo": null
+ },
+ {
+  "slug": "eng.w.fa",
+  "name": "English Women's FA Cup",
+  "short": "Women's FA Cup",
+  "country": "England",
+  "season": 2026,
+  "cup": true,
+  "women": true,
+  "logo": null
+ },
+ {
+  "slug": "eng.w.league_cup",
+  "name": "English WSL Players Cup",
+  "short": "WSL Players Cup",
+  "country": "England",
+  "season": 2026,
+  "cup": true,
+  "women": true,
+  "logo": null
+ },
+ {
+  "slug": "fra.1",
+  "name": "French Ligue 1",
+  "short": "Ligue 1",
+  "country": "France",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/9.png"
+ },
+ {
+  "slug": "fra.2",
+  "name": "French Ligue 2",
+  "short": "Ligue 2",
+  "country": "France",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "http://a.espncdn.com/i/leaguelogos/soccer/500-dark/96.png"
+ },
+ {
+  "slug": "fra.super_cup",
+  "name": "French Trophee des Champions",
+  "short": "Trophee des Champions",
+  "country": "France",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/default-team-logo-500.png&w=100&h=100"
+ },
+ {
+  "slug": "fra.coupe_de_france",
+  "name": "Coupe de France",
+  "short": "Coupe de France",
+  "country": "France",
+  "season": 2025,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/182.png"
+ },
+ {
+  "slug": "fra.1.promotion.relegation",
+  "name": "French Ligue 1 Promotion/Relegation Playoffs",
+  "short": "Ligue 1 Pro/Rel",
+  "country": "France",
+  "season": 2025,
+  "cup": true,
+  "women": false,
+  "logo": null
+ },
+ {
+  "slug": "fra.w.1",
+  "name": "French Première Ligue",
+  "short": "Première Ligue",
+  "country": "France",
+  "season": 2026,
+  "cup": false,
+  "women": true,
+  "logo": null
+ },
+ {
+  "slug": "ger.1",
+  "name": "German Bundesliga",
+  "short": "Bundesliga",
+  "country": "Germany",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/10.png"
+ },
+ {
+  "slug": "ger.2",
+  "name": "German 2. Bundesliga",
+  "short": "2. Bundesliga",
+  "country": "Germany",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500/97.png"
+ },
+ {
+  "slug": "ger.super_cup",
+  "name": "German Supercup",
+  "short": "German SuperCup",
+  "country": "Germany",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/default-team-logo-500.png&w=100&h=100"
+ },
+ {
+  "slug": "ger.2.promotion.relegation",
+  "name": "German Bundesliga 2. Promotion/Relegation Playoffs",
+  "short": "2. Bundesliga Pro/Rel",
+  "country": "Germany",
+  "season": 2025,
+  "cup": true,
+  "women": false,
+  "logo": null
+ },
+ {
+  "slug": "ger.playoff.relegation",
+  "name": "German Bundesliga Promotion/Relegation Playoff",
+  "short": "Bundesliga Pro/Rel",
+  "country": "Germany",
+  "season": 2025,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/default-team-logo-500.png&w=100&h=100"
+ },
+ {
+  "slug": "ger.dfb_pokal",
+  "name": "German Cup",
+  "short": "German Cup",
+  "country": "Germany",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2061.png"
+ },
+ {
+  "slug": "gre.1",
+  "name": "Greek Super League",
+  "short": "Greek Super League",
+  "country": "Greece",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500/98.png"
+ },
+ {
+  "slug": "gua.1",
+  "name": "Guatemalan Liga Nacional",
+  "short": "Guatemalan Liga Nacional",
+  "country": "Guatemala",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2248.png"
+ },
+ {
+  "slug": "hon.1",
+  "name": "Honduran Liga Nacional",
+  "short": "Honduran Liga Nacional",
+  "country": "Honduras",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2247.png"
+ },
+ {
+  "slug": "ind.1",
+  "name": "Indian Super League",
+  "short": "Indian Super League",
+  "country": "India",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2334.png"
+ },
+ {
+  "slug": "ind.2",
+  "name": "Indian I-League",
+  "short": "Indian I-League",
+  "country": "India",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/default-team-logo-500.png&w=100&h=100"
+ },
+ {
+  "slug": "ita.1",
+  "name": "Italian Serie A",
+  "short": "Serie A",
+  "country": "Italy",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/12.png"
+ },
+ {
+  "slug": "ita.2",
+  "name": "Italian Serie B",
+  "short": "Italian Serie B",
+  "country": "Italy",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "http://a.espncdn.com/i/leaguelogos/soccer/500/99.png"
+ },
+ {
+  "slug": "ita.super_cup",
+  "name": "Italian Supercoppa",
+  "short": "Italian Supercoppa",
+  "country": "Italy",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/guid/9ac93c94-9f6b-4428-839d-1b8a5fdc7a6a/logos/default-dark.png"
+ },
+ {
+  "slug": "ita.coppa_italia",
+  "name": "Coppa Italia",
+  "short": "Coppa Italia",
+  "country": "Italy",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500/2192.png"
+ },
+ {
+  "slug": "jpn.1",
+  "name": "Japanese J.League",
+  "short": "Japanese J1 League",
+  "country": "Japan",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2199.png"
+ },
+ {
+  "slug": "jpn.world_challenge",
+  "name": "Japanese J.League World Challenge",
+  "short": "J.League World Challenge",
+  "country": "Japan",
+  "season": 2025,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/default-team-logo-500.png&w=100&h=100"
+ },
+ {
+  "slug": "mex.1",
+  "name": "Mexican Liga BBVA MX",
+  "short": "Liga MX",
+  "country": "Mexico",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/22.png"
+ },
+ {
+  "slug": "mex.2",
+  "name": "Mexican Liga de Expansión MX",
+  "short": "Liga de Expansión MX",
+  "country": "Mexico",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2306.png"
+ },
+ {
+  "slug": "mex.campeon",
+  "name": "Mexican Campeon de Campeones",
+  "short": "Campeon de Campeones",
+  "country": "Mexico",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/default-team-logo-500.png&w=100&h=100"
+ },
+ {
+  "slug": "mex.w.1",
+  "name": "Mexican Liga BBVA MX Femenil",
+  "short": "Liga MX Femenil",
+  "country": "Mexico",
+  "season": 2026,
+  "cup": false,
+  "women": true,
+  "logo": null
+ },
+ {
+  "slug": "ned.1",
+  "name": "Dutch Eredivisie",
+  "short": "Eredivisie",
+  "country": "Netherlands",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/11.png"
+ },
+ {
+  "slug": "ned.2",
+  "name": "Dutch Keuken Kampioen Divisie",
+  "short": "Keuken Kampioen Divisie",
+  "country": "Netherlands",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/105.png"
+ },
+ {
+  "slug": "ned.supercup",
+  "name": "Dutch Johan Cruyff Shield",
+  "short": "Johan Cruyff Shield",
+  "country": "Netherlands",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/default-team-logo-500.png&w=100&h=100"
+ },
+ {
+  "slug": "ned.playoff.relegation",
+  "name": "Dutch Eredivisie Promotion/Relegation Playoffs",
+  "short": "Eredivisie Pro/Rel",
+  "country": "Netherlands",
+  "season": 2025,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/default-team-logo-500.png&w=100&h=100"
+ },
+ {
+  "slug": "ned.cup",
+  "name": "Dutch KNVB Beker",
+  "short": "KNVB Beker",
+  "country": "Netherlands",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2196.png"
+ },
+ {
+  "slug": "ned.3.promotion.relegation",
+  "name": "Dutch Tweede Divisie Promotion/Relegation Playoffs",
+  "short": "Dutch Playoffs 3/4",
+  "country": "Netherlands",
+  "season": 2025,
+  "cup": true,
+  "women": false,
+  "logo": null
+ },
+ {
+  "slug": "ned.w.1",
+  "name": "Dutch Vrouwen Eredivisie",
+  "short": "Dutch Vrouwen Eredivisie",
+  "country": "Netherlands",
+  "season": 2026,
+  "cup": false,
+  "women": true,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2453.png"
+ },
+ {
+  "slug": "ned.w.knvb_cup",
+  "name": "Dutch KNVB Beker Vrouwen",
+  "short": "Dutch Vrouwen KNVB Beker",
+  "country": "Netherlands",
+  "season": 2026,
+  "cup": true,
+  "women": true,
+  "logo": null
+ },
+ {
+  "slug": "nor.1",
+  "name": "Norwegian Eliteserien",
+  "short": "Norwegian Eliteserien",
+  "country": "Norway",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/default-team-logo-500.png&w=100&h=100"
+ },
+ {
+  "slug": "nor.1.promotion.relegation",
+  "name": "Norwegian Eliteserien Promotion/Relegation Playoffs",
+  "short": "Norwegian Eliteserien Pro/Rel",
+  "country": "Norway",
+  "season": 2025,
+  "cup": false,
+  "women": false,
+  "logo": null
+ },
+ {
+  "slug": "par.1",
+  "name": "Paraguayan Primera División",
+  "short": "Paraguayan Primera",
+  "country": "Paraguay",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/1892.png"
+ },
+ {
+  "slug": "par.1.supercopa",
+  "name": "Paraguayan Supercopa",
+  "short": "Paraguayan Supercopa",
+  "country": "Paraguay",
+  "season": 2025,
+  "cup": true,
+  "women": false,
+  "logo": null
+ },
+ {
+  "slug": "per.1",
+  "name": "Peruvian Liga 1",
+  "short": "Peru Liga 1",
+  "country": "Peru",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/1813.png"
+ },
+ {
+  "slug": "por.1",
+  "name": "Portuguese Primeira Liga",
+  "short": "Portuguese Liga",
+  "country": "Portugal",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/14.png"
+ },
+ {
+  "slug": "por.1.promotion.relegation",
+  "name": "Portuguese Primeira Liga Promotion/Relegation Playoffs",
+  "short": "Portuguese Liga Pro/Rel",
+  "country": "Portugal",
+  "season": 2025,
+  "cup": false,
+  "women": false,
+  "logo": null
+ },
+ {
+  "slug": "por.taca.portugal",
+  "name": "Taca de Portugal",
+  "short": "Taca de Portugal",
+  "country": "Portugal",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": null
+ },
+ {
+  "slug": "rus.1",
+  "name": "Russian Premier League",
+  "short": "Russian Premier League",
+  "country": "Russia",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/106.png"
+ },
+ {
+  "slug": "rus.1.promotion.relegation",
+  "name": "Russian Premier League Relegation/Promotion Playoffs",
+  "short": "Russian Premier League Pro/Rel",
+  "country": "Russia",
+  "season": 2025,
+  "cup": false,
+  "women": false,
+  "logo": null
+ },
+ {
+  "slug": "ksa.1",
+  "name": "Saudi Pro League",
+  "short": "Saudi Pro League",
+  "country": "Saudi Arabia",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2488.png"
+ },
+ {
+  "slug": "ksa.kings.cup",
+  "name": "Saudi King's Cup",
+  "short": "Saudi King's Cup",
+  "country": "Saudi Arabia",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": null
+ },
+ {
+  "slug": "sco.1",
+  "name": "Scottish Premiership",
+  "short": "SPFL Premiership",
+  "country": "Scotland",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/45.png"
+ },
+ {
+  "slug": "sco.2",
+  "name": "Scottish Championship",
+  "short": "SPFL Championship",
+  "country": "Scotland",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/default-team-logo-500.png&w=100&h=100"
+ },
+ {
+  "slug": "sco.2.promotion.relegation",
+  "name": "Scottish Championship Promotion/Relegation Playoffs",
+  "short": "SPFL Championship Pro/Rel",
+  "country": "Scotland",
+  "season": 2025,
+  "cup": false,
+  "women": false,
+  "logo": null
+ },
+ {
+  "slug": "sco.tennents",
+  "name": "Scottish Cup",
+  "short": "Scottish Cup",
+  "country": "Scotland",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/default-team-logo-500.png&w=100&h=100"
+ },
+ {
+  "slug": "sco.tennents_qual",
+  "name": "Scottish Cup Qualifying",
+  "short": "Scottish Cup Qualifying",
+  "country": "Scotland",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": null
+ },
+ {
+  "slug": "sco.challenge",
+  "name": "Scottish League Challenge Cup",
+  "short": "SPFL Challenge Cup",
+  "country": "Scotland",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/default-team-logo-500.png&w=100&h=100"
+ },
+ {
+  "slug": "sco.cis",
+  "name": "Scottish League Cup",
+  "short": "SLC",
+  "country": "Scotland",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/default-team-logo-500.png&w=100&h=100"
+ },
+ {
+  "slug": "sco.1.promotion.relegation",
+  "name": "Scottish Premiership Promotion/Relegation Playoffs",
+  "short": "SPFL Premiership Pro/Rel",
+  "country": "Scotland",
+  "season": 2025,
+  "cup": true,
+  "women": false,
+  "logo": null
+ },
+ {
+  "slug": "rsa.1",
+  "name": "South African Premiership",
+  "short": "South African Premiership",
+  "country": "South Africa",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/default-team-logo-500.png&w=100&h=100"
+ },
+ {
+  "slug": "esp.1",
+  "name": "Spanish LALIGA",
+  "short": "LALIGA",
+  "country": "Spain",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/15.png"
+ },
+ {
+  "slug": "esp.2",
+  "name": "Spanish LALIGA 2",
+  "short": "LALIGA 2",
+  "country": "Spain",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "http://a.espncdn.com/i/leaguelogos/soccer/500/107.png"
+ },
+ {
+  "slug": "esp.joan_gamper",
+  "name": "Trofeo Joan Gamper",
+  "short": "Trofeo Joan Gamper",
+  "country": "Spain",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/default-team-logo-500.png&w=100&h=100"
+ },
+ {
+  "slug": "esp.copa_del_rey",
+  "name": "Spanish Copa del Rey",
+  "short": "Copa del Rey",
+  "country": "Spain",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/80.png"
+ },
+ {
+  "slug": "esp.super_cup",
+  "name": "Spanish Supercopa",
+  "short": "Spanish Supercopa",
+  "country": "Spain",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/guid/f3ea21b4-d55a-317d-9e8e-6dfd6cd7963a/logos/default-dark.png"
+ },
+ {
+  "slug": "esp.w.1",
+  "name": "Spanish Liga F",
+  "short": "Liga F",
+  "country": "Spain",
+  "season": 2026,
+  "cup": false,
+  "women": true,
+  "logo": null
+ },
+ {
+  "slug": "esp.copa_de_la_reina",
+  "name": "Spanish Copa de la Reina",
+  "short": "Copa de la Reina",
+  "country": "Spain",
+  "season": 2026,
+  "cup": true,
+  "women": true,
+  "logo": null
+ },
+ {
+  "slug": "swe.1",
+  "name": "Swedish Allsvenskan",
+  "short": "Swedish Allsvenskan",
+  "country": "Sweden",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500/16.png"
+ },
+ {
+  "slug": "swe.1.promotion.relegation",
+  "name": "Swedish Allsvenskan Promotion/Relegation Playoffs",
+  "short": "Swedish Allsvenskan Pro/Rel",
+  "country": "Sweden",
+  "season": 2025,
+  "cup": false,
+  "women": false,
+  "logo": null
+ },
+ {
+  "slug": "tur.1",
+  "name": "Turkish Super Lig",
+  "short": "Turkish Super Lig",
+  "country": "Türkiye",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/18.png"
+ },
+ {
+  "slug": "usa.1",
+  "name": "MLS",
+  "short": "MLS",
+  "country": "United States",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/19.png"
+ },
+ {
+  "slug": "usa.ncaa.m.1",
+  "name": "NCAA Men's Soccer",
+  "short": "CMSOC",
+  "country": "United States",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/redesign/assets/img/icons/ESPN-icon-soccer.png"
+ },
+ {
+  "slug": "usa.usl.1",
+  "name": "USL Championship",
+  "short": "USL Championship",
+  "country": "United States",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2292.png"
+ },
+ {
+  "slug": "usa.usl.l1",
+  "name": "USL League One",
+  "short": "USL League One",
+  "country": "United States",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2452.png"
+ },
+ {
+  "slug": "usa.open",
+  "name": "U.S. Open Cup",
+  "short": "U.S. Open Cup",
+  "country": "United States",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500/69.png"
+ },
+ {
+  "slug": "usa.usl.l1.cup",
+  "name": "USL Cup",
+  "short": "USL Cup",
+  "country": "United States",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": null
+ },
+ {
+  "slug": "usa.ncaa.w.1",
+  "name": "NCAA Women's Soccer",
+  "short": "CWSOC",
+  "country": "United States",
+  "season": 2026,
+  "cup": false,
+  "women": true,
+  "logo": "https://a.espncdn.com/redesign/assets/img/icons/ESPN-icon-soccer.png"
+ },
+ {
+  "slug": "usa.w.usl.1",
+  "name": "USL Super League",
+  "short": "USL Super League",
+  "country": "United States",
+  "season": 2026,
+  "cup": false,
+  "women": true,
+  "logo": null
+ },
+ {
+  "slug": "usa.nwsl",
+  "name": "NWSL",
+  "short": "NWSL",
+  "country": "United States",
+  "season": 2026,
+  "cup": false,
+  "women": true,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2323.png"
+ },
+ {
+  "slug": "usa.nwsl.cup",
+  "name": "NWSL Challenge Cup",
+  "short": "NWSL Challenge Cup",
+  "country": "United States",
+  "season": 2026,
+  "cup": false,
+  "women": true,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2445.png"
+ },
+ {
+  "slug": "uru.1",
+  "name": "Liga AUF Uruguaya",
+  "short": "Liga AUF Uruguaya",
+  "country": "Uruguay",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/1592.png"
+ },
+ {
+  "slug": "ven.1",
+  "name": "Venezuelan Primera División",
+  "short": "Liga FUTVE",
+  "country": "Venezuela",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/1947.png"
+ },
+ {
+  "slug": "campeones.cup",
+  "name": "Campeones Cup",
+  "short": "Campeones Cup",
+  "country": "World",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/default-team-logo-500.png&w=100&h=100"
+ },
+ {
+  "slug": "club.friendly",
+  "name": "Club Friendly",
+  "short": "Club Friendly",
+  "country": "World",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": null
+ },
+ {
+  "slug": "global.u20.intercontinental_cup",
+  "name": "CONMEBOL-UEFA U20 Intercontinental Cup",
+  "short": "U20 Intercontinental Cup",
+  "country": "World",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": null
+ },
+ {
+  "slug": "friendly.emirates_cup",
+  "name": "Emirates Cup",
+  "short": "Emirates Cup",
+  "country": "World",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/default-team-logo-500.png&w=100&h=100"
+ },
+ {
+  "slug": "fifa.friendly",
+  "name": "International Friendly",
+  "short": "Men's International Friendly",
+  "country": "World",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/53.png"
+ },
+ {
+  "slug": "nonfifa",
+  "name": "Non-FIFA Friendly",
+  "short": "Non-FIFA Friendly",
+  "country": "World",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": null
+ },
+ {
+  "slug": "uefa.super_cup",
+  "name": "UEFA Super Cup",
+  "short": "UEFA Super Cup",
+  "country": "World",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/1272.png"
+ },
+ {
+  "slug": "fifa.friendly_u21",
+  "name": "Under-21 International Friendly",
+  "short": "Men's U-21 Friendly",
+  "country": "World",
+  "season": 2026,
+  "cup": false,
+  "women": false,
+  "logo": null
+ },
+ {
+  "slug": "afc.asian.cup",
+  "name": "AFC Asian Cup",
+  "short": "AFC Asian Cup",
+  "country": "World",
+  "season": 2027,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500-dark/2243.png"
+ },
+ {
+  "slug": "afc.champions",
+  "name": "AFC Champions League Elite",
+  "short": "AFC Champions League Elite",
+  "country": "World",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2200.png"
+ },
+ {
+  "slug": "afc.champions_qual",
+  "name": "AFC Champions League Elite Qualifying",
+  "short": "AFC Champions League Elite Qualifying",
+  "country": "World",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": null
+ },
+ {
+  "slug": "afc.cup",
+  "name": "AFC Champions League Two",
+  "short": "AFC Champions League Two",
+  "country": "World",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2243.png"
+ },
+ {
+  "slug": "afc.cup_qual",
+  "name": "AFC Champions League Two Qualifying",
+  "short": "AFC Champions League Two Qualifying",
+  "country": "World",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": null
+ },
+ {
+  "slug": "caf.nations",
+  "name": "Africa Cup of Nations",
+  "short": "Africa Cup of Nations",
+  "country": "World",
+  "season": 2025,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/76.png"
+ },
+ {
+  "slug": "caf.nations_qual",
+  "name": "Africa Cup of Nations Qualifying",
+  "short": "AFCON Qualifying",
+  "country": "World",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/default-team-logo-500.png&w=100&h=100"
+ },
+ {
+  "slug": "global.gulf_cup",
+  "name": "Arabian Gulf Cup",
+  "short": "Arabian Gulf Cup",
+  "country": "World",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": null
+ },
+ {
+  "slug": "aff.championship",
+  "name": "ASEAN Championship",
+  "short": "ASEAN Champ",
+  "country": "World",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2261.png"
+ },
+ {
+  "slug": "caf.champions",
+  "name": "CAF Champions League",
+  "short": "CAF Champions League",
+  "country": "World",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2391.png"
+ },
+ {
+  "slug": "caf.confed",
+  "name": "CAF Confederation Cup",
+  "short": "CAF Confederation Cup",
+  "country": "World",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/default-team-logo-500.png&w=100&h=100"
+ },
+ {
+  "slug": "concacaf.central.american.cup",
+  "name": "Concacaf Central American Cup",
+  "short": "Concacaf Central American Cup",
+  "country": "World",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": null
+ },
+ {
+  "slug": "concacaf.champions",
+  "name": "Concacaf Champions Cup",
+  "short": "Concacaf Champions Cup",
+  "country": "World",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2298.png"
+ },
+ {
+  "slug": "concacaf.gold",
+  "name": "Concacaf Gold Cup",
+  "short": "Gold Cup",
+  "country": "World",
+  "season": 2025,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/59.png"
+ },
+ {
+  "slug": "concacaf.gold_qual",
+  "name": "Concacaf Gold Cup Qualifying",
+  "short": "Gold Cup Qualifying",
+  "country": "World",
+  "season": 2025,
+  "cup": true,
+  "women": false,
+  "logo": null
+ },
+ {
+  "slug": "concacaf.nations.league",
+  "name": "Concacaf Nations League",
+  "short": "Concacaf Nations League",
+  "country": "World",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2406.png"
+ },
+ {
+  "slug": "conmebol.libertadores",
+  "name": "CONMEBOL Libertadores",
+  "short": "CONMEBOL Libertadores",
+  "country": "World",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/58.png"
+ },
+ {
+  "slug": "conmebol.recopa",
+  "name": "CONMEBOL Recopa",
+  "short": "CONMEBOL Recopa",
+  "country": "World",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2335.png"
+ },
+ {
+  "slug": "conmebol.sudamericana",
+  "name": "CONMEBOL Sudamericana",
+  "short": "CONMEBOL Sudamericana",
+  "country": "World",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/1208.png"
+ },
+ {
+  "slug": "global.finalissima",
+  "name": "CONMEBOL-UEFA Cup of Champions",
+  "short": "Men's Finalissima",
+  "country": "World",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": null
+ },
+ {
+  "slug": "caf.cosafa",
+  "name": "COSAFA Cup",
+  "short": "COSAFA Cup",
+  "country": "World",
+  "season": 2025,
+  "cup": true,
+  "women": false,
+  "logo": null
+ },
+ {
+  "slug": "fifa.cwc",
+  "name": "FIFA Club World Cup",
+  "short": "Club World Cup",
+  "country": "World",
+  "season": 2025,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/1932.png"
+ },
+ {
+  "slug": "fifa.intercontinental_cup",
+  "name": "FIFA Intercontinental Cup",
+  "short": "FIFA Intercontinental Cup",
+  "country": "World",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": null
+ },
+ {
+  "slug": "fifa.world.u17",
+  "name": "FIFA Under-17 World Cup",
+  "short": "FIFA U-17 World Cup",
+  "country": "World",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2288.png"
+ },
+ {
+  "slug": "fifa.world.u20",
+  "name": "FIFA Under-20 World Cup",
+  "short": "FIFA U-20 World Cup",
+  "country": "World",
+  "season": 2025,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500/2285.png"
+ },
+ {
+  "slug": "fifa.world",
+  "name": "FIFA World Cup",
+  "short": "FIFA World Cup",
+  "country": "World",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/4.png"
+ },
+ {
+  "slug": "fifa.wcq.ply",
+  "name": "FIFA World Cup Qualifying - Playoff Tournament",
+  "short": "WCQ - Playoff Tournament",
+  "country": "World",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": null
+ },
+ {
+  "slug": "fifa.worldq.uefa",
+  "name": "FIFA World Cup Qualifying - UEFA",
+  "short": "WCQ - UEFA",
+  "country": "World",
+  "season": 2025,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/67.png"
+ },
+ {
+  "slug": "concacaf.leagues.cup",
+  "name": "Leagues Cup",
+  "short": "Leagues Cup",
+  "country": "World",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2410.png"
+ },
+ {
+  "slug": "uefa.champions",
+  "name": "UEFA Champions League",
+  "short": "UEFA Champions League",
+  "country": "World",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2.png"
+ },
+ {
+  "slug": "uefa.champions_qual",
+  "name": "UEFA Champions League Qualifying",
+  "short": "UEFA Champions League Qualifying",
+  "country": "World",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": null
+ },
+ {
+  "slug": "uefa.europa.conf",
+  "name": "UEFA Conference League",
+  "short": "UEFA Conference League",
+  "country": "World",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/20296.png"
+ },
+ {
+  "slug": "uefa.europa.conf_qual",
+  "name": "UEFA Conference League Qualifying",
+  "short": "UEFA Conference League Qualifying",
+  "country": "World",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": null
+ },
+ {
+  "slug": "uefa.europa",
+  "name": "UEFA Europa League",
+  "short": "UEFA Europa League",
+  "country": "World",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2310.png"
+ },
+ {
+  "slug": "uefa.europa_qual",
+  "name": "UEFA Europa League Qualifying",
+  "short": "UEFA Europa League Qualfiying",
+  "country": "World",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": null
+ },
+ {
+  "slug": "uefa.euro.u19",
+  "name": "UEFA European Under-19 Championship",
+  "short": "EURO Under-19",
+  "country": "World",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": "http://a.espncdn.com/i/leaguelogos/soccer/500/2297.png"
+ },
+ {
+  "slug": "uefa.euro_u21",
+  "name": "UEFA European Under-21 Championship",
+  "short": "EURO Under-21",
+  "country": "World",
+  "season": 2025,
+  "cup": true,
+  "women": false,
+  "logo": "http://a.espncdn.com/i/leaguelogos/soccer/500/2284.png"
+ },
+ {
+  "slug": "uefa.euro_u21_qual",
+  "name": "UEFA European Under-21 Championship Qualifying",
+  "short": "EURO U-21 Qualifying",
+  "country": "World",
+  "season": 2025,
+  "cup": true,
+  "women": false,
+  "logo": null
+ },
+ {
+  "slug": "uefa.nations",
+  "name": "UEFA Nations League",
+  "short": "UEFA Nations League",
+  "country": "World",
+  "season": 2026,
+  "cup": true,
+  "women": false,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2395.png"
+ },
+ {
+  "slug": "fifa.friendly.w",
+  "name": "Women's International Friendly",
+  "short": "Women's International Friendly",
+  "country": "World",
+  "season": 2026,
+  "cup": false,
+  "women": true,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/70.png"
+ },
+ {
+  "slug": "afc.w.asian.cup",
+  "name": "AFC Women's Asian Cup",
+  "short": "AFC Women's Asian Cup",
+  "country": "World",
+  "season": 2026,
+  "cup": true,
+  "women": true,
+  "logo": null
+ },
+ {
+  "slug": "concacaf.w.champions_cup",
+  "name": "Concacaf W Champions Cup",
+  "short": "W Champions Cup",
+  "country": "World",
+  "season": 2025,
+  "cup": true,
+  "women": true,
+  "logo": null
+ },
+ {
+  "slug": "concacaf.womens.championship",
+  "name": "Concacaf W Championship",
+  "short": "Concacaf W Championship",
+  "country": "World",
+  "season": 2026,
+  "cup": true,
+  "women": true,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/18969.png"
+ },
+ {
+  "slug": "conmebol.america.femenina",
+  "name": "Copa América Femenina",
+  "short": "Copa América Femenina",
+  "country": "World",
+  "season": 2025,
+  "cup": true,
+  "women": true,
+  "logo": null
+ },
+ {
+  "slug": "fifa.wworld.u17",
+  "name": "FIFA Under-17 Women's World Cup",
+  "short": "FIFA U-17 Women's World Cup",
+  "country": "World",
+  "season": 2026,
+  "cup": true,
+  "women": true,
+  "logo": null
+ },
+ {
+  "slug": "fifa.w.champions_cup",
+  "name": "FIFA Women's Champions Cup",
+  "short": "Women's Champions Cup",
+  "country": "World",
+  "season": 2027,
+  "cup": true,
+  "women": true,
+  "logo": null
+ },
+ {
+  "slug": "fifa.wworldq.uefa",
+  "name": "FIFA Women's World Cup Qualifying - UEFA",
+  "short": "WWCQ - UEFA",
+  "country": "World",
+  "season": 2026,
+  "cup": true,
+  "women": true,
+  "logo": null
+ },
+ {
+  "slug": "global.pinatar_cup",
+  "name": "Pinatar Cup",
+  "short": "Pinatar Cup",
+  "country": "World",
+  "season": 2025,
+  "cup": true,
+  "women": true,
+  "logo": null
+ },
+ {
+  "slug": "fifa.shebelieves",
+  "name": "SheBelieves Cup",
+  "short": "SheBelieves Cup",
+  "country": "World",
+  "season": 2026,
+  "cup": true,
+  "women": true,
+  "logo": null
+ },
+ {
+  "slug": "uefa.wchampions",
+  "name": "UEFA Women's Champions League",
+  "short": "UEFA Women's Champions League",
+  "country": "World",
+  "season": 2026,
+  "cup": true,
+  "women": true,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2408.png"
+ },
+ {
+  "slug": "uefa.wchampions_qual",
+  "name": "UEFA Women's Champions League Qualifying",
+  "short": "UEFA Women's Champions League Qualifying",
+  "country": "World",
+  "season": 2026,
+  "cup": true,
+  "women": true,
+  "logo": null
+ },
+ {
+  "slug": "uefa.w.europa",
+  "name": "UEFA Women's Europa Cup",
+  "short": "Women's Europa Cup",
+  "country": "World",
+  "season": 2026,
+  "cup": true,
+  "women": true,
+  "logo": null
+ },
+ {
+  "slug": "uefa.weuro",
+  "name": "UEFA Women's European Championship",
+  "short": "Women's EURO",
+  "country": "World",
+  "season": 2025,
+  "cup": true,
+  "women": true,
+  "logo": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2381.png"
+ },
+ {
+  "slug": "uefa.w.nations",
+  "name": "UEFA Women's Nations League",
+  "short": "Women's Nations League",
+  "country": "World",
+  "season": 2025,
+  "cup": true,
+  "women": true,
+  "logo": null
+ },
+ {
+  "slug": "caf.w.nations",
+  "name": "Women's Africa Cup of Nations",
+  "short": "Women's Africa Cup of Nations",
+  "country": "World",
+  "season": 2026,
+  "cup": true,
+  "women": true,
+  "logo": null
+ }
+]

@@ -1,8 +1,11 @@
 import { after, before, describe, it } from "node:test"
 import assert from "node:assert/strict"
 import { WebSocket } from "ws"
+import { asc, eq } from "drizzle-orm"
 import { seedFixtures } from "./helpers.js"
 import { getMatch } from "../src/services/views.js"
+import { standings, teams } from "../src/db/schema.js"
+import { syncAndPublishTables } from "../src/jobs/scheduler.js"
 import { ORIGIN, sessionCookie, setup } from "./helpers.js"
 
 let ctx: Awaited<ReturnType<typeof setup>>
@@ -97,5 +100,43 @@ describe("live socket", () => {
     const evil = new WebSocket(url, { headers: { origin: "https://evil.example" } })
     const code = await new Promise((r) => evil.on("close", (code) => r(code)))
     assert.equal(code, 1008)
+  })
+
+  it("tells every client when a league table changes, and stays quiet when it doesn't", async () => {
+    const c = await connect()
+    c.send({ type: "subscribe", topic: "scores" })
+    await c.next((m) => m.type === "subscribed")
+
+    // Eredivisie feed with the current top two swapped on points.
+    const rows = await ctx.db
+      .select({ espnId: teams.espnId, name: teams.name })
+      .from(standings)
+      .innerJoin(teams, eq(teams.id, standings.teamId))
+      .where(eq(standings.leagueId, "ned.1"))
+      .orderBy(asc(standings.position))
+      .limit(2)
+    const stats = (pts: number) => [
+      { name: "gamesPlayed", value: 10 },
+      { name: "wins", value: pts / 3 },
+      { name: "ties", value: 0 },
+      { name: "losses", value: 10 - pts / 3 },
+      { name: "pointsFor", value: 12 },
+      { name: "pointsAgainst", value: 8 },
+      { name: "points", value: pts },
+    ]
+    const fetcher = async () => ({
+      children: [{ standings: { entries: rows.map((r, i) => ({ team: { id: r.espnId, displayName: r.name }, stats: stats(i === 0 ? 9 : 27) })) } }],
+    })
+
+    assert.deepEqual(await syncAndPublishTables(ctx.db, ctx.hub, { leagues: ["ned.1"], fetcher }), ["ned.1"])
+    assert.deepEqual(await c.next((m) => m.type === "table"), { type: "table", leagueId: "ned.1" })
+
+    assert.deepEqual(await syncAndPublishTables(ctx.db, ctx.hub, { leagues: ["ned.1"], fetcher }), [], "unchanged")
+    await assert.rejects(c.next((m) => m.type === "table"), /timed out/, "no event for an unchanged table")
+
+    // And the API now serves the new order.
+    const { table } = (await ctx.app.inject("/api/leagues/ned.1")).json()
+    assert.equal(table[0].rows[0].team.name, rows[1]!.name)
+    c.ws.close()
   })
 })
