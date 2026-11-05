@@ -1,0 +1,26 @@
+# Render Blueprint for the PitchLive API. Render → New → Blueprint → pick this repo.
+# The database is Postgres on Neon: paste its connection string into DATABASE_URL when asked.
+services:
+  - type: web
+    name: pitchlive-api
+    runtime: node
+    plan: free # free instances sleep after 15 minutes idle; "starter" stays on
+    region: frankfurt
+    branch: main
+    autoDeploy: true
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL # Neon connection string (direct, not pooled), ends in ?sslmode=require
+        sync: false
+      - key: CORS_ORIGIN # the website's address(es), comma-separated
+        sync: false
+      - key: FIREBASE_PROJECT_ID
+        value: pitchlive-2d004
+      - key: ESPN_SYNC
+        value: "true"
+      - key: ADMIN_TOKEN
+        generateValue: true

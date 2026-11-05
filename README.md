@@ -77,3 +77,15 @@ All responses are JSON. Writes need `Content-Type: application/json`, and reques
 ## Streaming
 
 Only attach streams you hold the rights to. `/api/matches/:id/playback` returns 404 for matches without one. For Mux signed playback set `MUX_SIGNING_KEY_ID` and `MUX_SIGNING_PRIVATE_KEY`, then attach with `{ "provider": "mux", "source": "<playback id>", "signed": true }`.
+
+## Deploy on Render (database on Neon)
+
+1. Create a free Postgres database on [Neon](https://neon.com) in the Frankfurt region and copy its
+   **direct** connection string (connection pooling off). It ends in `?sslmode=require`.
+2. On Render: **New → Blueprint**, pick this repository. Render reads `render.yaml`.
+3. When asked, set `DATABASE_URL` to the Neon connection string and `CORS_ORIGIN` to the website's
+   address. The API creates its tables and loads the league data on first start.
+4. Check `https://<service>.onrender.com/api/health` returns `{"ok":true}`.
+
+The free Render instance sleeps after 15 minutes without traffic; switch `plan` to `starter` in
+`render.yaml` to keep live syncing running around the clock.
