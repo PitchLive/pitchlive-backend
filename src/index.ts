@@ -1,4 +1,5 @@
 import { buildApp } from "./app.js"
+import { firebaseVerifier } from "./auth/firebase.js"
 import { loadConfig } from "./config.js"
 import { openDatabase } from "./db/client.js"
 import { isSeeded, seed } from "./db/seed.js"
@@ -8,7 +9,8 @@ import { LiveHub } from "./live/hub.js"
 const config = loadConfig()
 const { db, close } = await openDatabase({ url: config.DATABASE_URL, pgliteDir: config.PGLITE_DIR })
 const hub = new LiveHub()
-const app = await buildApp({ db, config, hub }, { logger: { level: config.NODE_ENV === "test" ? "warn" : "info" } })
+const verifyIdToken = firebaseVerifier(config.FIREBASE_PROJECT_ID)
+const app = await buildApp({ db, config, hub, verifyIdToken },{ logger: { level: config.NODE_ENV === "test" ? "warn" : "info" } })
 
 if (!(await isSeeded(db))) app.log.info(await seed(db), "database seeded from snapshot")
 

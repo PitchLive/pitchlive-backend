@@ -98,7 +98,8 @@ export const matches = pgTable(
 export const users = pgTable("users", {
   id: uuid("id").primaryKey().defaultRandom(),
   email: text("email").notNull().unique(),
-  passwordHash: text("password_hash").notNull(),
+  // Firebase Auth owns credentials; this links the account to its Firebase user.
+  firebaseUid: text("firebase_uid").unique(),
   displayName: text("display_name").notNull(),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 })

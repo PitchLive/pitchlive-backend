@@ -2,40 +2,42 @@ import type { FastifyInstance } from "fastify"
 import { and, asc, eq } from "drizzle-orm"
 import { z } from "zod"
 import { favorites, teams, users } from "../db/schema.js"
-import { hashPassword, verifyPassword } from "../auth/password.js"
+import type { DB } from "../db/client.js"
+import type { FirebaseIdentity } from "../auth/firebase.js"
 import { SESSION_COOKIE, createSession, revokeSession } from "../auth/session.js"
 import { HttpError, clearSessionCookie, notFound, parse, requireUser, currentUser, setSessionCookie, type Deps } from "../http.js"
 
-const email = z.string().trim().toLowerCase().email().max(254)
-const password = z.string().min(8, "must be at least 8 characters").max(200)
+const publicUser = { id: users.id, email: users.email, displayName: users.displayName }
 
-// Precomputed so failed logins for unknown emails take as long as wrong passwords.
-const DUMMY_HASH = await hashPassword("pitchlive-timing-equaliser")
+/** The PitchLive account for a Firebase user: found by uid, linked by verified email, or created. */
+async function accountFor(db: DB, id: FirebaseIdentity, requestedName?: string) {
+  const [byUid] = await db.select(publicUser).from(users).where(eq(users.firebaseUid, id.uid)).limit(1)
+  if (byUid) return byUid
 
-export async function authRoutes(app: FastifyInstance, { db, config }: Deps) {
-  const strict = { config: { rateLimit: { max: 10, timeWindow: "1 minute" } } }
+  const [byEmail] = await db.select({ ...publicUser, firebaseUid: users.firebaseUid }).from(users).where(eq(users.email, id.email)).limit(1)
+  if (byEmail) {
+    // Only a verified email may claim an existing account, or anyone could sign up as someone else.
+    if (!id.emailVerified) throw new HttpError(409, "An account with this email already exists. Continue with Google, or verify your email first.")
+    await db.update(users).set({ firebaseUid: id.uid }).where(eq(users.id, byEmail.id))
+    return { id: byEmail.id, email: byEmail.email, displayName: byEmail.displayName }
+  }
 
-  app.post("/api/auth/register", strict, async (req, reply) => {
-    const body = parse(z.object({ email, password, displayName: z.string().trim().min(2).max(40) }), req.body)
-    const [existing] = await db.select({ id: users.id }).from(users).where(eq(users.email, body.email)).limit(1)
-    if (existing) throw new HttpError(409, "An account with that email already exists")
-    const [user] = await db
-      .insert(users)
-      .values({ email: body.email, displayName: body.displayName, passwordHash: await hashPassword(body.password) })
-      .returning({ id: users.id, email: users.email, displayName: users.displayName })
-    const session = await createSession(db, user!.id, config.SESSION_TTL_DAYS)
-    setSessionCookie(reply, config, session.token, session.expiresAt)
-    return reply.code(201).send({ user })
-  })
+  const displayName = id.name ?? requestedName ?? id.email.split("@")[0]!.slice(0, 40)
+  const [created] = await db.insert(users).values({ email: id.email, firebaseUid: id.uid, displayName }).returning(publicUser)
+  return created!
+}
 
-  app.post("/api/auth/login", strict, async (req, reply) => {
-    const body = parse(z.object({ email, password: z.string().max(200) }), req.body)
-    const [user] = await db.select().from(users).where(eq(users.email, body.email)).limit(1)
-    const ok = await verifyPassword(body.password, user?.passwordHash ?? DUMMY_HASH)
-    if (!user || !ok) throw new HttpError(401, "Incorrect email or password")
+export async function authRoutes(app: FastifyInstance, { db, config, verifyIdToken }: Deps) {
+  const strict = { config: { rateLimit: { max: config.AUTH_RATE_LIMIT, timeWindow: "1 minute" } } }
+
+  // The browser signs in with Firebase, then trades the Firebase ID token for our session cookie.
+  app.post("/api/auth/firebase", strict, async (req, reply) => {
+    const body = parse(z.object({ idToken: z.string().min(10).max(8192), displayName: z.string().trim().min(2).max(40).optional() }), req.body)
+    const identity = await verifyIdToken(body.idToken)
+    const user = await accountFor(db, identity, body.displayName)
     const session = await createSession(db, user.id, config.SESSION_TTL_DAYS)
     setSessionCookie(reply, config, session.token, session.expiresAt)
-    return { user: { id: user.id, email: user.email, displayName: user.displayName } }
+    return { user }
   })
 
   app.post("/api/auth/logout", async (req, reply) => {

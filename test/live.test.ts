@@ -6,7 +6,7 @@ import { seedFixtures } from "./helpers.js"
 import { getMatch } from "../src/services/views.js"
 import { standings, teams } from "../src/db/schema.js"
 import { syncAndPublishTables } from "../src/jobs/scheduler.js"
-import { ORIGIN, sessionCookie, setup } from "./helpers.js"
+import { ORIGIN, setup, signIn } from "./helpers.js"
 
 let ctx: Awaited<ReturnType<typeof setup>>
 let url: string
@@ -18,8 +18,7 @@ before(async () => {
   await ctx.app.listen({ port: 0, host: "127.0.0.1" })
   const addr = ctx.app.server.address() as { port: number }
   url = `ws://127.0.0.1:${addr.port}/api/live`
-  const reg = await ctx.app.inject({ method: "POST", url: "/api/auth/register", payload: { email: "chat@x.io", password: "longenough1", displayName: "Chatter" } })
-  cookie = sessionCookie(reg)
+  cookie = await signIn(ctx.app, "uid-chat", "chat@x.io", "Chatter")
 })
 after(() => ctx.close())
 
