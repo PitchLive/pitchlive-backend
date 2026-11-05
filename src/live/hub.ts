@@ -1,5 +1,6 @@
 import type { WebSocket } from "ws"
 import type { MatchView } from "../services/views.js"
+import type { MatchDetails } from "../services/matchDetails.js"
 
 export type ChatView = { id: number; matchId: string; user: { id: string; displayName: string }; body: string; createdAt: string }
 
@@ -8,6 +9,8 @@ export type ServerEvent =
   | { type: "subscribed"; topic: string }
   | { type: "match"; match: MatchView }
   | { type: "chat"; message: ChatView }
+  | { type: "details"; details: MatchDetails }
+  | { type: "table"; leagueId: string }
   | { type: "error"; error: string }
 
 /**
@@ -47,6 +50,11 @@ export class LiveHub {
     const event: ServerEvent = { type: "match", match }
     this.publish("scores", event)
     this.publish(`match:${match.id}`, event)
+  }
+
+  /** Match ids that at least one connected client is watching. */
+  watchedMatches(): string[] {
+    return [...this.topics.entries()].filter(([t, s]) => t.startsWith("match:") && s.size > 0).map(([t]) => t.slice(6))
   }
 
   get connectionCount() {

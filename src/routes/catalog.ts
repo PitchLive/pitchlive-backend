@@ -1,44 +1,99 @@
 import type { FastifyInstance } from "fastify"
-import { asc, desc, eq, inArray } from "drizzle-orm"
+import { asc, desc, eq, inArray, lte } from "drizzle-orm"
 import { z } from "zod"
 import { chatMessages, matchStatuses, standings, teams, users } from "../db/schema.js"
 import { notFound, parse, type Deps } from "../http.js"
 import { getLeague, getMatch, getTeam, leagueTable, listLeagues, listMatches, searchTeams } from "../services/views.js"
+import { getMatchDetails } from "../services/matchDetails.js"
+import { catalogEntry, countries, ensureLeague, leaguesOf } from "../services/leagueCatalog.js"
 
 const idParam = z.object({ id: z.string().min(1).max(64) })
 
 export async function catalogRoutes(app: FastifyInstance, { db }: Deps) {
+  // Stats, line-ups, key events and commentary. Live matches are refreshed by the
+  // match-details job and pushed to subscribers; this serves the current copy.
+  app.get("/api/matches/:id/details", async (req, reply) => {
+    const { id } = parse(idParam, req.params)
+    if (!(await getMatch(db, id))) throw notFound("Match")
+    const result = await getMatchDetails(db, id)
+    if (!result) throw notFound("Match details")
+    reply.header("cache-control", "no-cache")
+    return { details: result.details }
+  })
+
   app.get("/api/leagues", async () => {
-    const [all, leaders] = await Promise.all([
+    const [all, topRows] = await Promise.all([
       listLeagues(db),
       db
-        .select({ leagueId: standings.leagueId, group: standings.groupName, points: standings.points, team: { id: teams.id, name: teams.name, short: teams.short, logo: teams.logo } })
+        .select({
+          leagueId: standings.leagueId,
+          group: standings.groupName,
+          position: standings.position,
+          played: standings.played,
+          points: standings.points,
+          team: { id: teams.id, name: teams.name, short: teams.short, color: teams.color, color2: teams.color2, logo: teams.logo },
+        })
         .from(standings)
         .innerJoin(teams, eq(teams.id, standings.teamId))
-        .where(eq(standings.position, 1)),
+        .where(lte(standings.position, 3))
+        .orderBy(asc(standings.groupName), asc(standings.position)),
     ])
     const counts = await db.select({ leagueId: standings.leagueId }).from(standings)
     const clubCount = new Map<string, number>()
     for (const c of counts) clubCount.set(c.leagueId, (clubCount.get(c.leagueId) ?? 0) + 1)
     return {
-      leagues: all.map((l) => ({
-        ...l,
-        clubCount: clubCount.get(l.id) ?? 0,
-        leaders: leaders.filter((x) => x.leagueId === l.id).map(({ leagueId: _, group, ...rest }) => ({ group: group || null, ...rest })),
-      })),
+      leagues: all.map((l) => {
+        const rows = topRows.filter((x) => x.leagueId === l.id)
+        const firstGroup = rows[0]?.group
+        return {
+          ...l,
+          clubCount: clubCount.get(l.id) ?? 0,
+          // Each group's leader (MLS conferences etc.) and the first group's top three.
+          leaders: rows.filter((x) => x.position === 1).map(({ group, points, team }) => ({ group: group || null, points, team })),
+          top: rows.filter((x) => x.group === firstGroup).map(({ position, played, points, team }) => ({ position, played, points, team })),
+        }
+      }),
     }
+  })
+
+  // Countries with soccer coverage, and the competitions in each (any of them can be opened).
+  app.get("/api/countries", async () => ({ countries: countries() }))
+
+  app.get("/api/countries/:name/leagues", async (req) => {
+    const { name } = parse(z.object({ name: z.string().min(1).max(80) }), req.params)
+    return { leagues: leaguesOf(name) }
   })
 
   app.get("/api/leagues/:id", async (req) => {
     const { id } = parse(idParam, req.params)
+    if (!(await ensureLeague(db, id))) throw notFound("League")
     const league = await getLeague(db, id)
     if (!league) throw notFound("League")
-    return { league, table: await leagueTable(db, id) }
+    const entry = catalogEntry(id)
+    return { league: { ...league, cup: entry?.cup ?? false, women: entry?.women ?? false }, table: await leagueTable(db, id) }
+  })
+
+  // A league's season: "results" (latest first) or "fixtures" (soonest first, including any in play).
+  app.get("/api/leagues/:id/matches", async (req) => {
+    const { id } = parse(idParam, req.params)
+    const q = parse(
+      z.object({
+        kind: z.enum(["results", "fixtures"]).default("fixtures"),
+        limit: z.coerce.number().int().min(1).max(500).default(500),
+      }),
+      req.query,
+    )
+    if (!(await ensureLeague(db, id))) throw notFound("League")
+    const list =
+      q.kind === "results"
+        ? await listMatches(db, { leagueId: id, status: ["FT"], limit: q.limit, order: "desc" })
+        : await listMatches(db, { leagueId: id, status: ["LIVE", "HT", "UPCOMING", "POSTPONED"], limit: q.limit, order: "asc" })
+    return { matches: list }
   })
 
   app.get("/api/leagues/:id/teams", async (req) => {
     const { id } = parse(idParam, req.params)
-    if (!(await getLeague(db, id))) throw notFound("League")
+    if (!(await ensureLeague(db, id))) throw notFound("League")
     const table = await leagueTable(db, id)
     const ids = table.flatMap((g) => g.rows.map((r) => r.team.id))
     return { teams: ids.length ? await db.select().from(teams).where(inArray(teams.id, ids)).orderBy(asc(teams.name)) : [] }
@@ -65,7 +120,7 @@ export async function catalogRoutes(app: FastifyInstance, { db }: Deps) {
 
   app.get("/api/teams/:id/matches", async (req) => {
     const { id } = parse(idParam, req.params)
-    return { matches: await listMatches(db, { teamId: id, limit: 50 }) }
+    return { matches: await listMatches(db, { teamId: id, limit: 200 }) }
   })
 
   app.get("/api/matches", async (req) => {

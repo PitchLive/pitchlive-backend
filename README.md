@@ -17,15 +17,16 @@ No database install is needed: without `DATABASE_URL` the server uses **PGlite**
 | Script | Does |
 |---|---|
 | `npm run dev` | Start with reload |
-| `npm test` | 20 tests: REST, auth, WebSocket, ESPN sync (in-memory DB, ESPN mocked) |
+| `npm test` | REST, auth, WebSocket, ESPN sync and live-loop tests (in-memory DB, ESPN mocked) |
 | `npm run build` / `npm start` | Compile to `dist/` and run it |
 | `npm run db:generate` | New SQL migration after editing `src/db/schema.ts` |
 | `npm run db:seed` | Re-load the snapshot into the database |
 
 ## Data
 
-- **Background jobs** (`src/jobs/`): fixtures and scores from ESPN every minute while a match is live (otherwise every 5 minutes), tables every 15 minutes, form and stadiums daily. Score changes are pushed to WebSocket subscribers.
-- **Demo matches** (`DEMO_MATCHES=true`): four simulated live games with the public Mux test stream, so the player and live updates can be built offline. These are not real.
+- **Live scores** (`src/jobs/scheduler.ts`): leagues with a match in play (or kicking off within the next couple of minutes) are re-read from ESPN every 10 seconds, and every change is pushed to WebSocket subscribers at once. Each match carries ESPN's clock (`clockSeconds`, `period`, `clockDisplay`) and `clockAgeMs`, so clients can tick the clock every second between updates.
+- **Other jobs**: a full sweep of every league for yesterday to tomorrow every 2 minutes while anything is live (5 otherwise), tables every 5–15 minutes, form and stadiums daily.
+- All match data is real ESPN data; there is no simulated or sample data outside the test suite.
 - Team ids match the frontend (`ars`, `esp-96`, `t-1929`). The seed files come from the frontend repo: `npm run data:leagues` there regenerates `server/data/snapshot.json`. Copy it and `src/leagueCatalog.json` into this repo's `data/` folder to update them.
 
 ## API
@@ -75,4 +76,16 @@ All responses are JSON. Writes need `Content-Type: application/json`, and reques
 
 ## Streaming
 
-Only attach streams you hold the rights to. Matches without a configured stream return the public demo stream with `demo: true`. For Mux signed playback set `MUX_SIGNING_KEY_ID` and `MUX_SIGNING_PRIVATE_KEY`, then attach with `{ "provider": "mux", "source": "<playback id>", "signed": true }`.
+Only attach streams you hold the rights to. `/api/matches/:id/playback` returns 404 for matches without one. For Mux signed playback set `MUX_SIGNING_KEY_ID` and `MUX_SIGNING_PRIVATE_KEY`, then attach with `{ "provider": "mux", "source": "<playback id>", "signed": true }`.
+
+## Deploy on Render (database on Neon)
+
+1. Create a free Postgres database on [Neon](https://neon.com) in the Frankfurt region and copy its
+   **direct** connection string (connection pooling off). It ends in `?sslmode=require`.
+2. On Render: **New → Blueprint**, pick this repository. Render reads `render.yaml`.
+3. When asked, set `DATABASE_URL` to the Neon connection string and `CORS_ORIGIN` to the website's
+   address. The API creates its tables and loads the league data on first start.
+4. Check `https://<service>.onrender.com/api/health` returns `{"ok":true}`.
+
+The free Render instance sleeps after 15 minutes without traffic; switch `plan` to `starter` in
+`render.yaml` to keep live syncing running around the clock.

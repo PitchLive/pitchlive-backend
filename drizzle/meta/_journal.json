@@ -8,6 +8,34 @@
       "when": 1792752867327,
       "tag": "0000_init",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1793022167989,
+      "tag": "0001_match_clock",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793028320633,
+      "tag": "0002_league_on_demand",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1793836674733,
+      "tag": "0003_firebase_auth",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1793836716057,
+      "tag": "0004_drop_password_hash",
+      "breakpoints": true
     }
   ]
 }

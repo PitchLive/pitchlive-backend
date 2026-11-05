@@ -14,17 +14,17 @@ const schema = z.object({
   CORS_ORIGIN: z.string().default("http://localhost:8443"),
   COOKIE_SECURE: bool.optional(),
   SESSION_TTL_DAYS: z.coerce.number().positive().default(30),
+  // Firebase Auth handles sign-up and sign-in; the server only verifies its ID tokens.
+  FIREBASE_PROJECT_ID: z.string().min(1).optional(),
+  // Sign-in attempts allowed per IP per minute.
+  AUTH_RATE_LIMIT: z.coerce.number().int().positive().default(10),
   ADMIN_TOKEN: z.string().min(16).optional(),
   // Background sync with ESPN's public soccer endpoints.
   ESPN_SYNC: bool.default(true),
-  // Simulated live matches for local development when nothing real is on.
-  DEMO_MATCHES: bool.default(false),
   // Mux signed playback. Private key is the base64-encoded PEM Mux gives you.
   MUX_SIGNING_KEY_ID: z.string().optional(),
   MUX_SIGNING_PRIVATE_KEY: z.string().optional(),
   PLAYBACK_TOKEN_TTL_SECONDS: z.coerce.number().int().positive().default(3600),
-  // Public test stream returned for matches without a configured stream.
-  DEMO_STREAM_URL: z.string().default("https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"),
 })
 
 export type Config = z.infer<typeof schema> & { cookieSecure: boolean }

@@ -4,8 +4,9 @@ import type { Config } from "./config.js"
 import type { DB } from "./db/client.js"
 import type { LiveHub } from "./live/hub.js"
 import { SESSION_COOKIE, userForToken, type SessionUser } from "./auth/session.js"
+import type { VerifyIdToken } from "./auth/firebase.js"
 
-export type Deps = { db: DB; config: Config; hub: LiveHub }
+export type Deps = { db: DB; config: Config; hub: LiveHub; verifyIdToken: VerifyIdToken }
 
 export class HttpError extends Error {
   constructor(

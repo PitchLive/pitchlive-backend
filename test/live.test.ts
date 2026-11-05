@@ -1,9 +1,12 @@
 import { after, before, describe, it } from "node:test"
 import assert from "node:assert/strict"
 import { WebSocket } from "ws"
-import { seedDemoMatches } from "../src/jobs/demo.js"
+import { asc, eq } from "drizzle-orm"
+import { seedFixtures } from "./helpers.js"
 import { getMatch } from "../src/services/views.js"
-import { ORIGIN, sessionCookie, setup } from "./helpers.js"
+import { standings, teams } from "../src/db/schema.js"
+import { syncAndPublishTables } from "../src/jobs/scheduler.js"
+import { ORIGIN, setup, signIn } from "./helpers.js"
 
 let ctx: Awaited<ReturnType<typeof setup>>
 let url: string
@@ -11,12 +14,11 @@ let cookie: string
 
 before(async () => {
   ctx = await setup()
-  await seedDemoMatches(ctx.db, ctx.config.DEMO_STREAM_URL)
+  await seedFixtures(ctx.db)
   await ctx.app.listen({ port: 0, host: "127.0.0.1" })
   const addr = ctx.app.server.address() as { port: number }
   url = `ws://127.0.0.1:${addr.port}/api/live`
-  const reg = await ctx.app.inject({ method: "POST", url: "/api/auth/register", payload: { email: "chat@x.io", password: "longenough1", displayName: "Chatter" } })
-  cookie = sessionCookie(reg)
+  cookie = await signIn(ctx.app, "uid-chat", "chat@x.io", "Chatter")
 })
 after(() => ctx.close())
 
@@ -54,36 +56,36 @@ describe("live socket", () => {
 
   it("pushes the current match on subscribe and later score updates", async () => {
     const c = await connect()
-    c.send({ type: "subscribe", topic: "match:demo-1" })
+    c.send({ type: "subscribe", topic: "match:fx-1" })
     const first = await c.next((m) => m.type === "match")
-    assert.equal(first.match.id, "demo-1")
+    assert.equal(first.match.id, "fx-1")
 
     c.send({ type: "subscribe", topic: "scores" })
     await c.next((m) => m.type === "subscribed" && m.topic === "scores")
-    ctx.hub.publishMatch((await getMatch(ctx.db, "demo-2"))!)
-    assert.equal((await c.next((m) => m.type === "match")).match.id, "demo-2")
+    ctx.hub.publishMatch((await getMatch(ctx.db, "fx-2"))!)
+    assert.equal((await c.next((m) => m.type === "match")).match.id, "fx-2")
     c.ws.close()
   })
 
   it("broadcasts chat to match subscribers and rejects anonymous chat", async () => {
     const viewer = await connect()
-    viewer.send({ type: "subscribe", topic: "match:demo-1" })
+    viewer.send({ type: "subscribe", topic: "match:fx-1" })
     await viewer.next((m) => m.type === "subscribed")
 
     const anon = await connect()
-    anon.send({ type: "chat", matchId: "demo-1", body: "hi" })
+    anon.send({ type: "chat", matchId: "fx-1", body: "hi" })
     assert.equal((await anon.next((m) => m.type === "error")).error, "Sign in to chat")
 
     const author = await connect({ cookie })
-    author.send({ type: "chat", matchId: "demo-1", body: "  What a goal!  " })
+    author.send({ type: "chat", matchId: "fx-1", body: "  What a goal!  " })
     const msg = await viewer.next((m) => m.type === "chat")
     assert.equal(msg.message.body, "What a goal!")
     assert.equal(msg.message.user.displayName, "Chatter")
 
-    author.send({ type: "chat", matchId: "demo-1", body: "again" })
+    author.send({ type: "chat", matchId: "fx-1", body: "again" })
     assert.equal((await author.next((m) => m.type === "error")).error, "Slow down")
 
-    const history = (await ctx.app.inject("/api/matches/demo-1")).json().chat
+    const history = (await ctx.app.inject("/api/matches/fx-1")).json().chat
     assert.equal(history.at(-1).body, "What a goal!")
     for (const c of [viewer, anon, author]) c.ws.close()
   })
@@ -97,5 +99,43 @@ describe("live socket", () => {
     const evil = new WebSocket(url, { headers: { origin: "https://evil.example" } })
     const code = await new Promise((r) => evil.on("close", (code) => r(code)))
     assert.equal(code, 1008)
+  })
+
+  it("tells every client when a league table changes, and stays quiet when it doesn't", async () => {
+    const c = await connect()
+    c.send({ type: "subscribe", topic: "scores" })
+    await c.next((m) => m.type === "subscribed")
+
+    // Eredivisie feed with the current top two swapped on points.
+    const rows = await ctx.db
+      .select({ espnId: teams.espnId, name: teams.name })
+      .from(standings)
+      .innerJoin(teams, eq(teams.id, standings.teamId))
+      .where(eq(standings.leagueId, "ned.1"))
+      .orderBy(asc(standings.position))
+      .limit(2)
+    const stats = (pts: number) => [
+      { name: "gamesPlayed", value: 10 },
+      { name: "wins", value: pts / 3 },
+      { name: "ties", value: 0 },
+      { name: "losses", value: 10 - pts / 3 },
+      { name: "pointsFor", value: 12 },
+      { name: "pointsAgainst", value: 8 },
+      { name: "points", value: pts },
+    ]
+    const fetcher = async () => ({
+      children: [{ standings: { entries: rows.map((r, i) => ({ team: { id: r.espnId, displayName: r.name }, stats: stats(i === 0 ? 9 : 27) })) } }],
+    })
+
+    assert.deepEqual(await syncAndPublishTables(ctx.db, ctx.hub, { leagues: ["ned.1"], fetcher }), ["ned.1"])
+    assert.deepEqual(await c.next((m) => m.type === "table"), { type: "table", leagueId: "ned.1" })
+
+    assert.deepEqual(await syncAndPublishTables(ctx.db, ctx.hub, { leagues: ["ned.1"], fetcher }), [], "unchanged")
+    await assert.rejects(c.next((m) => m.type === "table"), /timed out/, "no event for an unchanged table")
+
+    // And the API now serves the new order.
+    const { table } = (await ctx.app.inject("/api/leagues/ned.1")).json()
+    assert.equal(table[0].rows[0].team.name, rows[1]!.name)
+    c.ws.close()
   })
 })

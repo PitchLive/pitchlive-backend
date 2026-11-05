@@ -3,6 +3,9 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
+  "engines": {
+    "node": ">=22.12"
+  },
   "scripts": {
     "dev": "tsx watch --env-file-if-exists=.env src/index.ts",
     "start": "node --env-file-if-exists=.env dist/index.js",
@@ -10,7 +13,8 @@
     "typecheck": "tsc --noEmit",
     "test": "tsx --test test/*.test.ts",
     "db:generate": "drizzle-kit generate",
-    "db:seed": "tsx --env-file-if-exists=.env src/db/seed-cli.ts"
+    "db:seed": "tsx --env-file-if-exists=.env src/db/seed-cli.ts",
+    "data:catalog": "node scripts/fetch-league-catalog.mjs"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.3.0",
@@ -20,6 +24,7 @@
     "@fastify/websocket": "^11.0.0",
     "drizzle-orm": "^0.45.0",
     "fastify": "^5.0.0",
+    "jose": "^6.2.15",
     "postgres": "^3.4.0",
     "ws": "^8.22.0",
     "zod": "^4.0.0"

@@ -1,8 +1,9 @@
 import { after, before, describe, it } from "node:test"
 import assert from "node:assert/strict"
-import { eq } from "drizzle-orm"
+import { eq, inArray } from "drizzle-orm"
 import { matches, standings, teams } from "../src/db/schema.js"
 import { mapStatus, syncScoreboards, syncStandings } from "../src/jobs/espn.js"
+import { TableRechecks, leaguesInPlay } from "../src/jobs/scheduler.js"
 import { setup } from "./helpers.js"
 
 let ctx: Awaited<ReturnType<typeof setup>>
@@ -25,11 +26,38 @@ const event = (id: string, state: "pre" | "in" | "post", name: string, clock: st
 })
 
 describe("ESPN sync", () => {
-  it("maps statuses", () => {
-    assert.deepEqual(mapStatus({ displayClock: "67'", type: { name: "STATUS_IN_PROGRESS", state: "in" } }), { status: "LIVE", minute: 67 })
-    assert.deepEqual(mapStatus({ displayClock: "45'", type: { name: "STATUS_HALFTIME", state: "in" } }), { status: "HT", minute: 45 })
-    assert.deepEqual(mapStatus({ type: { name: "STATUS_FULL_TIME", state: "post" } }), { status: "FT", minute: null })
-    assert.deepEqual(mapStatus({ type: { name: "STATUS_POSTPONED", state: "pre" } }), { status: "POSTPONED", minute: null })
+  it("maps statuses and the match clock", () => {
+    const noClock = { minute: null, period: null, clockSeconds: null, clockDisplay: null }
+    assert.deepEqual(mapStatus({ clock: 4021.4, displayClock: "67'", period: 2, type: { name: "STATUS_SECOND_HALF", state: "in" } }), {
+      status: "LIVE",
+      minute: 67,
+      period: 2,
+      clockSeconds: 4021,
+      clockDisplay: "67'",
+    })
+    assert.deepEqual(mapStatus({ clock: 2700, displayClock: "45'", period: 1, type: { name: "STATUS_HALFTIME", state: "in" } }), {
+      status: "HT",
+      minute: 45,
+      period: 1,
+      clockSeconds: 2700,
+      clockDisplay: "45'",
+    })
+    // Finished matches drop the clock so clients don't keep ticking it.
+    assert.deepEqual(mapStatus({ clock: 5400, displayClock: "90'+9'", period: 2, type: { name: "STATUS_FULL_TIME", state: "post" } }), { status: "FT", ...noClock })
+    assert.deepEqual(mapStatus({ type: { name: "STATUS_POSTPONED", state: "pre" } }), { status: "POSTPONED", ...noClock })
+  })
+
+  it("picks only leagues with a match in play or kicking off for the fast loop", async () => {
+    const now = new Date("2026-10-23T19:00:00Z")
+    const base = { homeScore: 0, awayScore: 0 }
+    await ctx.db.insert(matches).values([
+      { id: "lp-1", leagueId: "ger.1", homeId: "bay", awayId: "bvb", status: "LIVE", kickoff: new Date("2026-10-23T18:30:00Z"), ...base },
+      { id: "lp-2", leagueId: "ita.1", homeId: "juv", awayId: "nap", status: "UPCOMING", kickoff: new Date("2026-10-23T19:01:00Z"), ...base },
+      { id: "lp-3", leagueId: "fra.1", homeId: "psg", awayId: "mon", status: "UPCOMING", kickoff: new Date("2026-10-23T21:00:00Z"), ...base },
+      { id: "lp-4", leagueId: "esp.1", homeId: "bar", awayId: "sev", status: "FT", kickoff: new Date("2026-10-23T16:00:00Z"), ...base },
+    ])
+    assert.deepEqual((await leaguesInPlay(ctx.db, now)).sort(), ["ger.1", "ita.1"])
+    await ctx.db.delete(matches).where(inArray(matches.id, ["lp-1", "lp-2", "lp-3", "lp-4"]))
   })
 
   it("upserts scoreboard matches, maps known clubs and creates unknown ones", async () => {
@@ -53,6 +81,18 @@ describe("ESPN sync", () => {
     assert.equal(m!.homeScore, 1)
     const [created] = await ctx.db.select().from(teams).where(eq(teams.id, "t-999999"))
     assert.equal(created!.short, "NEW")
+  })
+
+  it("limits the fast pass to the given leagues and days", async () => {
+    const urls: string[] = []
+    const fetcher = async (url: string) => (urls.push(url), { events: [] })
+    await syncScoreboards(ctx.db, fetcher, new Date("2026-10-23T12:00:00Z"), { leagues: ["eng.1", "esp.1"], days: [-1, 0] })
+    assert.deepEqual(urls.map((u) => u.replace(/^.*soccer\//, "")).sort(), [
+      "eng.1/scoreboard?dates=20261022",
+      "eng.1/scoreboard?dates=20261023",
+      "esp.1/scoreboard?dates=20261022",
+      "esp.1/scoreboard?dates=20261023",
+    ])
   })
 
   it("replaces a league table, re-sorting unordered feeds and keeping form", async () => {
@@ -85,11 +125,24 @@ describe("ESPN sync", () => {
         ],
       }
     }
-    assert.equal(await syncStandings(ctx.db, fetcher), 1)
+    assert.deepEqual(await syncStandings(ctx.db, fetcher), ["sco.1"], "reports the league whose table changed")
     const after = await ctx.db.select().from(standings).where(eq(standings.leagueId, "sco.1"))
     assert.equal(after.length, 2)
     const top = after.find((r) => r.position === 1)!
     assert.equal(top.teamId, tb!.id, "re-sorted by points")
     assert.equal(top.form, b!.form, "form preserved")
+    assert.deepEqual(await syncStandings(ctx.db, fetcher, { leagues: ["sco.1"] }), [], "an unchanged table is not reported")
+  })
+
+  it("re-checks a league's table a few times after one of its matches ends", () => {
+    const r = new TableRechecks()
+    const t0 = 1_000_000
+    r.schedule("eng.1", t0)
+    assert.deepEqual(r.take(t0 + 1_000), [], "nothing due straight away")
+    assert.deepEqual(r.take(t0 + 31_000), ["eng.1"], "first check after 30 s")
+    assert.deepEqual(r.take(t0 + 32_000), [], "each due time fires once")
+    assert.deepEqual(r.take(t0 + 3 * 60_000 + 1), ["eng.1"])
+    assert.deepEqual(r.take(t0 + 8 * 60_000 + 1), ["eng.1"])
+    assert.deepEqual(r.take(t0 + 60 * 60_000), [], "done after the last check")
   })
 })

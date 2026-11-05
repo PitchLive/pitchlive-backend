@@ -10,7 +10,9 @@ export async function streamingRoutes(app: FastifyInstance, { db, config }: Deps
     await requireUser(db, req)
     const { id } = parse(z.object({ id: z.string().min(1).max(64) }), req.params)
     if (!(await getMatch(db, id))) throw notFound("Match")
+    const playback = await playbackFor(db, config, id)
+    if (!playback) throw notFound("Stream")
     reply.header("cache-control", "private, no-store")
-    return { playback: await playbackFor(db, config, id) }
+    return { playback }
   })
 }

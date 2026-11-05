@@ -3,7 +3,8 @@ import type { FastifyInstance, FastifyRequest } from "fastify"
 import { z } from "zod"
 import { streams } from "../db/schema.js"
 import { seed } from "../db/seed.js"
-import { syncScoreboards, syncStandings, syncTeamDetails } from "../jobs/espn.js"
+import { syncScoreboards, syncTeamDetails } from "../jobs/espn.js"
+import { syncAndPublishTables } from "../jobs/scheduler.js"
 import { HttpError, notFound, parse, type Deps } from "../http.js"
 import { getMatch } from "../services/views.js"
 
@@ -21,7 +22,7 @@ export async function adminRoutes(app: FastifyInstance, { db, config, hub }: Dep
       case "seed":
         return { result: await seed(db) }
       case "standings":
-        return { result: { leagues: await syncStandings(db) } }
+        return { result: { changed: await syncAndPublishTables(db, hub) } }
       case "teams":
         return { result: { teams: await syncTeamDetails(db) } }
       case "scoreboards": {
