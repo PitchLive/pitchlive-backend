@@ -48,6 +48,24 @@ export async function authRoutes(app: FastifyInstance, { db, config, verifyIdTok
 
   app.get("/api/auth/me", async (req) => ({ user: await currentUser(db, req) }))
 
+  /* App settings */
+
+  // Whatever the app stores (alerts, Spoiler Shield, clock…), kept small and JSON-only.
+  const settingsBody = z.object({ settings: z.record(z.string(), z.unknown()) }).refine((b) => JSON.stringify(b.settings).length <= 4096, "Settings too large")
+
+  app.get("/api/me/settings", async (req) => {
+    const user = await requireUser(db, req)
+    const [row] = await db.select({ settings: users.settings }).from(users).where(eq(users.id, user.id)).limit(1)
+    return { settings: row?.settings ?? null }
+  })
+
+  app.put("/api/me/settings", async (req) => {
+    const user = await requireUser(db, req)
+    const { settings } = parse(settingsBody, req.body)
+    await db.update(users).set({ settings }).where(eq(users.id, user.id))
+    return { settings }
+  })
+
   /* Favourite clubs */
 
   app.get("/api/me/favorites", async (req) => {
