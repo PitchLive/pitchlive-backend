@@ -127,6 +127,20 @@ describe("auth", () => {
     assert.equal(ok.statusCode, 200)
   })
 
+  it("keeps app settings on the account", async () => {
+    assert.equal((await ctx.app.inject({ url: "/api/me/settings" })).statusCode, 401)
+    const cookie = await signIn(ctx.app, "uid-set", "set@x.io")
+    assert.equal((await ctx.app.inject({ url: "/api/me/settings", headers: { cookie } })).json().settings, null)
+    const settings = { clock24: false, alerts: { goals: true, kickoff: false }, spoiler: { enabled: true, delaySec: 90 } }
+    const put = await ctx.app.inject({ method: "PUT", url: "/api/me/settings", headers: { cookie }, payload: { settings } })
+    assert.equal(put.statusCode, 200)
+    assert.deepEqual((await ctx.app.inject({ url: "/api/me/settings", headers: { cookie } })).json().settings, settings)
+    const huge = await ctx.app.inject({ method: "PUT", url: "/api/me/settings", headers: { cookie }, payload: { settings: { blob: "x".repeat(5000) } } })
+    assert.equal(huge.statusCode, 400)
+    const other = await signIn(ctx.app, "uid-set-2", "set2@x.io")
+    assert.equal((await ctx.app.inject({ url: "/api/me/settings", headers: { cookie: other } })).json().settings, null, "per account")
+  })
+
   it("manages favourites for the signed-in user only", async () => {
     const cookie = await signIn(ctx.app, "uid-fav", "fav@x.io")
     assert.equal((await ctx.app.inject({ url: "/api/me/favorites" })).statusCode, 401)

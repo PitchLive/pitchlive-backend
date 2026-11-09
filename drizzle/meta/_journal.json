@@ -36,6 +36,13 @@
       "when": 1793836716057,
       "tag": "0004_drop_password_hash",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1794185000118,
+      "tag": "0005_user_settings",
+      "breakpoints": true
     }
   ]
 }

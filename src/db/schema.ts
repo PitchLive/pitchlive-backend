@@ -1,4 +1,4 @@
-import { boolean, index, integer, pgTable, primaryKey, serial, text, timestamp, uuid } from "drizzle-orm/pg-core"
+import { boolean, index, integer, jsonb, pgTable, primaryKey, serial, text, timestamp, uuid } from "drizzle-orm/pg-core"
 
 export const leagues = pgTable("leagues", {
   id: text("id").primaryKey(), // ESPN slug, e.g. "eng.1"
@@ -101,6 +101,8 @@ export const users = pgTable("users", {
   // Firebase Auth owns credentials; this links the account to its Firebase user.
   firebaseUid: text("firebase_uid").unique(),
   displayName: text("display_name").notNull(),
+  // App preferences (alerts, Spoiler Shield, clock…) so they follow the account to every device.
+  settings: jsonb("settings"),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 })
 

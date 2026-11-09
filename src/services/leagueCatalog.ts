@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url"
 import { and, eq, sql } from "drizzle-orm"
 import type { DB } from "../db/client.js"
 import { leagues } from "../db/schema.js"
-import { syncSeason, syncStandings } from "../jobs/espn.js"
+import { defaultFetcher, syncSeason, syncStandings, upsertEvents, type EspnEvent } from "../jobs/espn.js"
 
 export type CatalogLeague = {
   slug: string
@@ -99,4 +99,71 @@ export async function ensureLeague(db: DB, slug: string, fetcher?: Fetcher): Pro
 
 export function catalogEntry(slug: string) {
   return bySlug.get(slug)
+}
+
+/* ───────────── Every competition of the day ───────────── */
+
+const SCOREBOARD = "https://site.api.espn.com/apis/site/v2/sports/soccer"
+const HEADER = "https://site.web.api.espn.com/apis/v2/scoreboard/header?sport=soccer&dates="
+type HeaderLeague = { id?: string; slug?: string; name?: string; abbreviation?: string; events?: unknown[] }
+const ymd = (d: Date) => d.toISOString().slice(0, 10).replaceAll("-", "")
+
+/** A league row for a competition we have matches in, from the catalogue or ESPN's own listing. */
+async function ensureLeagueRow(db: DB, g: HeaderLeague & { slug: string }) {
+  const [row] = await db.select({ id: leagues.id }).from(leagues).where(eq(leagues.id, g.slug)).limit(1)
+  if (row) return true
+  const entry = bySlug.get(g.slug)
+  const name = entry?.name ?? g.name ?? g.slug
+  const values = {
+    id: g.slug,
+    name,
+    short: entry?.short ?? g.abbreviation ?? name,
+    country: entry?.country ?? "World",
+    code: g.slug.split(".")[0]!.toUpperCase(),
+    region: (entry?.country ?? "World") === "World" ? "International" : "Other",
+    founded: 0,
+    recordHolder: "",
+    accent: "#3d7bff",
+    blurb: "",
+    logo: entry?.logo ?? (g.id ? `https://a.espncdn.com/i/leaguelogos/soccer/500/${g.id}.png` : null),
+    season: entry?.season ? String(entry.season) : null,
+    sortOrder: 2000,
+    featured: false,
+  }
+  await db.insert(leagues).values(values).onConflictDoNothing()
+  // League names are unique: two competitions sharing one keep apart by slug.
+  const [made] = await db.select({ id: leagues.id }).from(leagues).where(eq(leagues.id, g.slug)).limit(1)
+  if (!made) await db.insert(leagues).values({ ...values, name: `${name} (${g.slug})` }).onConflictDoNothing()
+  return true
+}
+
+/**
+ * Matches in every competition ESPN covers on these days (cups, internationals, women's football
+ * and leagues nobody has opened yet), so the day's list is complete, not just the curated leagues.
+ * ESPN's scoreboard header names the competitions with matches each day; each one's scoreboard
+ * has the full events. Returns the ids of matches that changed.
+ */
+export async function syncAllCompetitions(db: DB, fetcher: Fetcher = defaultFetcher, now = new Date(), days = [-1, 0, 1]) {
+  const changed: string[] = []
+  for (const offset of days) {
+    const day = ymd(new Date(now.getTime() + offset * 86_400_000))
+    let groups: HeaderLeague[] = []
+    try {
+      const header = (await fetcher(HEADER + day)) as { sports?: { leagues?: HeaderLeague[] }[] }
+      groups = header.sports?.[0]?.leagues ?? []
+    } catch {
+      continue
+    }
+    for (const g of groups) {
+      if (!g.slug || !g.events?.length) continue
+      try {
+        await ensureLeagueRow(db, { ...g, slug: g.slug })
+        const data = (await fetcher(`${SCOREBOARD}/${g.slug}/scoreboard?dates=${day}`)) as { events?: EspnEvent[] }
+        changed.push(...(await upsertEvents(db, g.slug, data.events ?? [])))
+      } catch {
+        continue
+      }
+    }
+  }
+  return changed
 }

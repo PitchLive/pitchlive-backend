@@ -7,6 +7,7 @@ import { getMatch } from "../services/views.js"
 import { purgeExpiredSessions } from "../auth/session.js"
 import { syncScoreboards, syncSeason, syncStandings, syncTeamDetails } from "./espn.js"
 import { getMatchDetails } from "../services/matchDetails.js"
+import { syncAllCompetitions } from "../services/leagueCatalog.js"
 
 type Opts = { db: DB; hub: LiveHub; log: FastifyBaseLogger; espn: boolean }
 
@@ -135,6 +136,23 @@ export function startJobs({ db, hub, log, espn }: Opts) {
         await broadcast(changed)
         log.info({ changed: changed.length }, "scoreboards synced")
         return (await leaguesInPlay(db)).length ? 2 * MIN : 5 * MIN
+      }),
+    )
+    // Every other competition with matches from yesterday to tomorrow (cups, internationals,
+    // women's football), then the rest of the coming week less often.
+    stops.push(
+      loop("all-competitions", log, 20 * SEC, async () => {
+        const changed = await syncAllCompetitions(db)
+        await broadcast(changed)
+        log.info({ changed: changed.length }, "all competitions synced")
+        return 10 * MIN
+      }),
+    )
+    stops.push(
+      loop("week-ahead", log, 90 * SEC, async () => {
+        const changed = await syncAllCompetitions(db, undefined, new Date(), [2, 3, 4, 5, 6, 7])
+        log.info({ changed: changed.length }, "week ahead synced")
+        return 60 * MIN
       }),
     )
     // Whole seasons (results and fixtures) for league pages, club pages and form.

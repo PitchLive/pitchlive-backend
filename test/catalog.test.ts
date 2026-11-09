@@ -3,7 +3,7 @@ import assert from "node:assert/strict"
 import { eq } from "drizzle-orm"
 import { leagues, matches, standings } from "../src/db/schema.js"
 import { activeLeagueIds } from "../src/jobs/espn.js"
-import { ensureLeague } from "../src/services/leagueCatalog.js"
+import { ensureLeague, syncAllCompetitions } from "../src/services/leagueCatalog.js"
 import { setup } from "./helpers.js"
 
 let ctx: Awaited<ReturnType<typeof setup>>
@@ -82,5 +82,42 @@ describe("countries and on-demand leagues", () => {
   it("names the league on every match", async () => {
     const { matches: list } = (await ctx.app.inject("/api/leagues/eng.3/matches?kind=results")).json()
     assert.equal(list[0].leagueName, "English League One")
+  })
+})
+
+describe("every competition of the day", () => {
+  it("adds competitions ESPN lists for the day, with their matches and logos", async () => {
+    const now = new Date("2026-11-10T12:00:00Z")
+    const fetcher = async (url: string) => {
+      if (url.includes("scoreboard/header"))
+        return url.endsWith("20261110")
+          ? { sports: [{ leagues: [{ id: "3923", slug: "zzz.friendly", name: "Test Friendlies", abbreviation: "Friendly", events: [{}] }, { slug: "idle.1", events: [] }] }] }
+          : { sports: [{ leagues: [] }] }
+      if (url.includes("/zzz.friendly/scoreboard?dates=20261110"))
+        return {
+          events: [
+            {
+              id: "88001",
+              date: "2026-11-10T19:45Z",
+              status: { type: { name: "STATUS_SCHEDULED", state: "pre" } },
+              competitions: [{ competitors: [{ homeAway: "home", team: { id: "9001", displayName: "Ghana", abbreviation: "GHA" } }, { homeAway: "away", team: { id: "9002", displayName: "Japan", abbreviation: "JPN" } }] }],
+            },
+          ],
+        }
+      throw new Error("unexpected " + url)
+    }
+    const changed = await syncAllCompetitions(ctx.db, fetcher, now, [-1, 0, 1])
+    assert.deepEqual(changed, ["espn-88001"])
+    const [league] = await ctx.db.select().from(leagues).where(eq(leagues.id, "zzz.friendly"))
+    assert.equal(league?.featured, false)
+    assert.equal(league?.logo, "https://a.espncdn.com/i/leaguelogos/soccer/500/3923.png")
+    const [idle] = await ctx.db.select().from(leagues).where(eq(leagues.id, "idle.1"))
+    assert.equal(idle, undefined, "competitions without matches that day are skipped")
+
+    const { matches: day } = (await ctx.app.inject("/api/matches?date=2026-11-10")).json()
+    const m = day.find((x: { id: string }) => x.id === "espn-88001")
+    assert.equal(m.home.name, "Ghana")
+    assert.equal(m.leagueLogo, league?.logo)
+    assert.equal(typeof m.leagueCountry, "string")
   })
 })

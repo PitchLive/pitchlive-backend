@@ -15,7 +15,7 @@ export const defaultFetcher: Fetcher = async (url) => {
 }
 
 /** "2026-27 English Premier League" → "2026-27" */
-export const seasonLabel = (s: string | undefined) => s?.match(/^d{4}(-d{2})?/)?.[0] ?? null
+export const seasonLabel = (s: string | undefined) => s?.match(/^\d{4}(-\d{2})?/)?.[0] ?? null
 
 const hex = (c: unknown, fallback: string) => (typeof c === "string" && /^[0-9a-f]{6}$/i.test(c) ? `#${c}` : fallback)
 
@@ -51,7 +51,7 @@ async function resolveTeams(db: DB, espnTeams: EspnTeam[], leagueId: string | nu
 
 /* ───────────── Live scores ───────────── */
 
-type EspnEvent = {
+export type EspnEvent = {
   id: string
   date: string
   status: { clock?: number; displayClock?: string; period?: number; type: { name: string; state: "pre" | "in" | "post" } }

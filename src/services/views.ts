@@ -141,7 +141,7 @@ export type MatchView = Awaited<ReturnType<typeof queryMatches>>[number]
 
 async function queryMatches(db: DB, where: SQL | undefined, limit: number, order: "asc" | "desc" = "asc") {
   const rows = await db
-    .select({ m: matches, home: homeCols, away: awayCols, stream: streams.matchId, leagueName: leagues.name })
+    .select({ m: matches, home: homeCols, away: awayCols, stream: streams.matchId, leagueName: leagues.name, leagueLogo: leagues.logo, leagueCountry: leagues.country })
     .from(matches)
     .leftJoin(leagues, eq(leagues.id, matches.leagueId))
     .innerJoin(home, eq(home.id, matches.homeId))
@@ -155,6 +155,8 @@ async function queryMatches(db: DB, where: SQL | undefined, limit: number, order
     id: r.m.id,
     leagueId: r.m.leagueId,
     leagueName: r.leagueName,
+    leagueLogo: r.leagueLogo,
+    leagueCountry: r.leagueCountry,
     status: r.m.status,
     minute: r.m.minute,
     period: r.m.period,
