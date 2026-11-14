@@ -43,6 +43,13 @@
       "when": 1794185000118,
       "tag": "0005_user_settings",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1794412952006,
+      "tag": "0006_other_sports",
+      "breakpoints": true
     }
   ]
 }

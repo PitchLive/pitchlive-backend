@@ -1,4 +1,4 @@
-import { asc, eq, gt, inArray, isNotNull, or, sql } from "drizzle-orm"
+import { and, asc, eq, gt, inArray, isNotNull, or, sql } from "drizzle-orm"
 import type { DB } from "../db/client.js"
 import { leagues, matches, standings, teams, type MatchStatus } from "../db/schema.js"
 
@@ -134,7 +134,7 @@ export async function activeLeagueIds(db: DB, now = new Date()) {
   const rows = await db
     .select({ id: leagues.id })
     .from(leagues)
-    .where(or(eq(leagues.featured, true), gt(leagues.lastViewedAt, new Date(now.getTime() - ACTIVE_WINDOW_MS))))
+    .where(and(eq(leagues.sport, "soccer"), or(eq(leagues.featured, true), gt(leagues.lastViewedAt, new Date(now.getTime() - ACTIVE_WINDOW_MS)))))
   return rows.map((r) => r.id)
 }
 

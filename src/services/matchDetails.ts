@@ -4,6 +4,7 @@ import { alias } from "drizzle-orm/pg-core"
 import type { DB } from "../db/client.js"
 import { matches, teams, type MatchStatus } from "../db/schema.js"
 import { defaultFetcher } from "../jobs/espn.js"
+import { sportStats, type OtherSport } from "../jobs/sports.js"
 
 type Fetcher = (url: string) => Promise<unknown>
 type Side = "home" | "away"
@@ -229,7 +230,7 @@ const away = alias(teams, "away")
 
 async function matchRow(db: DB, matchId: string) {
   const [row] = await db
-    .select({ espnId: matches.espnId, leagueId: matches.leagueId, status: matches.status, homeEspn: home.espnId, awayEspn: away.espnId })
+    .select({ espnId: matches.espnId, leagueId: matches.leagueId, sport: matches.sport, status: matches.status, homeEspn: home.espnId, awayEspn: away.espnId })
     .from(matches)
     .innerJoin(home, eq(home.id, matches.homeId))
     .innerJoin(away, eq(away.id, matches.awayId))
@@ -253,6 +254,12 @@ export async function getMatchDetails(db: DB, matchId: string, opts: { fetcher?:
   if (!pending) {
     pending = (async () => {
       try {
+        if (row.sport !== "soccer") {
+          // Other sports: the box score's team stats; no line-ups, events or commentary.
+          const stats = await sportStats(row.sport as OtherSport, row.leagueId!, row.espnId!, row.homeEspn, row.awayEspn, opts.fetcher)
+          const details: MatchDetails = { matchId, stats, lineups: null, events: [], commentary: [], updatedAt: new Date().toISOString() }
+          return { details, hash: hashOf(details), fetchedAt: Date.now() }
+        }
         const raw = (await (opts.fetcher ?? defaultFetcher)(`https://site.api.espn.com/apis/site/v2/sports/soccer/${row.leagueId}/summary?event=${row.espnId}`)) as EspnSummary
         const sides = new Map<string, Side>()
         if (row.homeEspn) sides.set(row.homeEspn, "home")
