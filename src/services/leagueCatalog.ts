@@ -44,7 +44,9 @@ const RELOAD_MS = 10 * 60_000
  * it as viewed, which keeps the background jobs refreshing it. Returns false for unknown ids.
  */
 export async function ensureLeague(db: DB, slug: string, fetcher?: Fetcher): Promise<boolean> {
-  const [row] = await db.select({ id: leagues.id, featured: leagues.featured, lastViewedAt: leagues.lastViewedAt }).from(leagues).where(eq(leagues.id, slug)).limit(1)
+  const [row] = await db.select({ id: leagues.id, sport: leagues.sport, featured: leagues.featured, lastViewedAt: leagues.lastViewedAt }).from(leagues).where(eq(leagues.id, slug)).limit(1)
+  // Other sports are kept fresh by their own job; there's no table or season to load.
+  if (row && row.sport !== "soccer") return true
   const entry = bySlug.get(slug)
   if (!row && !entry) return false
 

@@ -90,11 +90,11 @@ function standingView(s: typeof standings.$inferSelect, team: TeamSummary, form?
   }
 }
 
-export async function searchTeams(db: DB, opts: { q?: string; leagueId?: string; limit: number }) {
+export async function searchTeams(db: DB, opts: { q?: string; leagueId?: string; sport?: string; limit: number }) {
   const all = await db
     .select()
     .from(teams)
-    .where(opts.leagueId ? eq(teams.leagueId, opts.leagueId) : undefined)
+    .where(opts.leagueId ? eq(teams.leagueId, opts.leagueId) : opts.sport ? eq(teams.sport, opts.sport) : undefined)
     .orderBy(asc(teams.name))
   // Accent-insensitive match done in JS so it behaves the same on PGlite and Postgres.
   const fold = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
@@ -157,6 +157,9 @@ async function queryMatches(db: DB, where: SQL | undefined, limit: number, order
     leagueName: r.leagueName,
     leagueLogo: r.leagueLogo,
     leagueCountry: r.leagueCountry,
+    sport: r.m.sport,
+    statusText: r.m.statusText,
+    linescores: r.m.linescores,
     status: r.m.status,
     minute: r.m.minute,
     period: r.m.period,
@@ -177,9 +180,10 @@ async function queryMatches(db: DB, where: SQL | undefined, limit: number, order
 
 export async function listMatches(
   db: DB,
-  opts: { leagueId?: string; teamId?: string; status?: MatchStatus[]; from?: Date; to?: Date; limit: number; order?: "asc" | "desc" },
+  opts: { leagueId?: string; teamId?: string; sport?: string; status?: MatchStatus[]; from?: Date; to?: Date; limit: number; order?: "asc" | "desc" },
 ) {
   const conds: (SQL | undefined)[] = [
+    opts.sport ? eq(matches.sport, opts.sport) : undefined,
     opts.leagueId ? eq(matches.leagueId, opts.leagueId) : undefined,
     opts.teamId ? or(eq(matches.homeId, opts.teamId), eq(matches.awayId, opts.teamId)) : undefined,
     opts.status?.length ? inArray(matches.status, opts.status) : undefined,
@@ -192,4 +196,14 @@ export async function listMatches(
 export async function getMatch(db: DB, id: string) {
   const [m] = await queryMatches(db, eq(matches.id, id), 1)
   return m ?? null
+}
+
+/** A sport's competitions with matches from three days ago to ten days ahead (tennis draws come and go). */
+export async function sportLeagues(db: DB, sport: string, now = new Date()) {
+  const rows = await db
+    .selectDistinct({ id: leagues.id, name: leagues.name, short: leagues.short, country: leagues.country, logo: leagues.logo, sortOrder: leagues.sortOrder })
+    .from(leagues)
+    .innerJoin(matches, eq(matches.leagueId, leagues.id))
+    .where(and(eq(leagues.sport, sport), gte(matches.kickoff, new Date(now.getTime() - 3 * 86_400_000)), lt(matches.kickoff, new Date(now.getTime() + 10 * 86_400_000))))
+  return rows.sort((a, b) => a.sortOrder - b.sortOrder || a.name.localeCompare(b.name)).map(({ sortOrder: _s, ...l }) => l)
 }

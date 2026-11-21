@@ -3,7 +3,8 @@ import { asc, desc, eq, inArray, lte } from "drizzle-orm"
 import { z } from "zod"
 import { chatMessages, matchStatuses, standings, teams, users } from "../db/schema.js"
 import { notFound, parse, type Deps } from "../http.js"
-import { getLeague, getMatch, getTeam, leagueTable, listLeagues, listMatches, searchTeams } from "../services/views.js"
+import { getLeague, getMatch, getTeam, leagueTable, listLeagues, listMatches, searchTeams, sportLeagues } from "../services/views.js"
+import { SPORTS } from "../jobs/sports.js"
 import { getMatchDetails } from "../services/matchDetails.js"
 import { catalogEntry, countries, ensureLeague, leaguesOf } from "../services/leagueCatalog.js"
 
@@ -104,11 +105,19 @@ export async function catalogRoutes(app: FastifyInstance, { db }: Deps) {
       z.object({
         q: z.string().max(80).optional(),
         league: z.string().max(64).optional(),
+        sport: z.enum(SPORTS).default("soccer"),
         limit: z.coerce.number().int().min(1).max(500).default(50),
       }),
       req.query,
     )
-    return { teams: await searchTeams(db, { q: q.q, leagueId: q.league, limit: q.limit }) }
+    return { teams: await searchTeams(db, { q: q.q, leagueId: q.league, sport: q.sport, limit: q.limit }) }
+  })
+
+  // The sports the app covers, and one sport's competitions with matches around now.
+  app.get("/api/sports", async () => ({ sports: SPORTS }))
+  app.get("/api/sports/:sport/leagues", async (req) => {
+    const { sport } = parse(z.object({ sport: z.enum(SPORTS) }), req.params)
+    return { leagues: await sportLeagues(db, sport) }
   })
 
   app.get("/api/teams/:id", async (req) => {
@@ -132,6 +141,8 @@ export async function catalogRoutes(app: FastifyInstance, { db }: Deps) {
           .pipe(z.array(z.enum(matchStatuses)))
           .optional(),
         league: z.string().max(64).optional(),
+        // Football unless asked: older apps expect only football here.
+        sport: z.enum([...SPORTS, "all"]).default("soccer"),
         date: z
           .string()
           .regex(/^\d{4}-\d{2}-\d{2}$/)
@@ -142,7 +153,7 @@ export async function catalogRoutes(app: FastifyInstance, { db }: Deps) {
     )
     const from = q.date ? new Date(`${q.date}T00:00:00Z`) : undefined
     const to = from ? new Date(from.getTime() + 86_400_000) : undefined
-    return { matches: await listMatches(db, { status: q.status, leagueId: q.league, from, to, limit: q.limit }) }
+    return { matches: await listMatches(db, { status: q.status, leagueId: q.league, sport: q.league || q.sport === "all" ? undefined : q.sport, from, to, limit: q.limit }) }
   })
 
   app.get("/api/matches/:id", async (req) => {

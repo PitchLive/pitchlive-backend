@@ -1,7 +1,8 @@
 import { boolean, index, integer, jsonb, pgTable, primaryKey, serial, text, timestamp, uuid } from "drizzle-orm/pg-core"
 
 export const leagues = pgTable("leagues", {
-  id: text("id").primaryKey(), // ESPN slug, e.g. "eng.1"
+  id: text("id").primaryKey(), // ESPN slug, e.g. "eng.1"; other sports are "<sport>.<slug>"
+  sport: text("sport").notNull().default("soccer"),
   name: text("name").notNull().unique(),
   short: text("short").notNull(),
   country: text("country").notNull(),
@@ -26,6 +27,7 @@ export const teams = pgTable(
   {
     id: text("id").primaryKey(), // same ids the frontend uses ("ars", "esp-96", "t-123")
     espnId: text("espn_id").unique(),
+    sport: text("sport").notNull().default("soccer"),
     name: text("name").notNull(),
     short: text("short").notNull(),
     city: text("city"),
@@ -88,6 +90,11 @@ export const matches = pgTable(
     period: integer("period"),
     clockSeconds: integer("clock_seconds"),
     clockDisplay: text("clock_display"), // e.g. "67'", "90'+3'"
+    sport: text("sport").notNull().default("soccer"),
+    // Other sports: ESPN's own status line ("4:21 - 3rd", "Top 5th", "Final/OT") and the
+    // score by period, inning or set.
+    statusText: text("status_text"),
+    linescores: jsonb("linescores").$type<{ home: number[]; away: number[]; homeTb?: (number | null)[]; awayTb?: (number | null)[] }>(),
     kickoff: timestamp("kickoff", { withTimezone: true }).notNull(),
     venue: text("venue"),
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),

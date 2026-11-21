@@ -8,6 +8,7 @@ import { purgeExpiredSessions } from "../auth/session.js"
 import { syncScoreboards, syncSeason, syncStandings, syncTeamDetails } from "./espn.js"
 import { getMatchDetails } from "../services/matchDetails.js"
 import { syncAllCompetitions } from "../services/leagueCatalog.js"
+import { sportsInPlay, syncSports } from "./sports.js"
 
 type Opts = { db: DB; hub: LiveHub; log: FastifyBaseLogger; espn: boolean }
 
@@ -44,6 +45,7 @@ export async function leaguesInPlay(db: DB, now = new Date()) {
     .from(matches)
     .where(
       and(
+        eq(matches.sport, "soccer"),
         isNotNull(matches.leagueId),
         or(
           inArray(matches.status, ["LIVE", "HT"]),
@@ -151,8 +153,26 @@ export function startJobs({ db, hub, log, espn }: Opts) {
     stops.push(
       loop("week-ahead", log, 90 * SEC, async () => {
         const changed = await syncAllCompetitions(db, undefined, new Date(), [2, 3, 4, 5, 6, 7])
+        changed.push(...(await syncSports(db, undefined, new Date(), { days: [2, 3, 4, 5, 6, 7] })))
         log.info({ changed: changed.length }, "week ahead synced")
         return 60 * MIN
+      }),
+    )
+    // Basketball, American football, hockey, baseball and tennis: yesterday to tomorrow, then a
+    // fast pass over whatever is in play.
+    stops.push(
+      loop("sports", log, 40 * SEC, async () => {
+        const changed = await syncSports(db)
+        await broadcast(changed)
+        log.info({ changed: changed.length }, "other sports synced")
+        return 10 * MIN
+      }),
+    )
+    stops.push(
+      loop("sports-live", log, 70 * SEC, async () => {
+        const only = await sportsInPlay(db)
+        if (only.length) await broadcast(await syncSports(db, undefined, new Date(), { days: [-1, 0], only }))
+        return 20 * SEC
       }),
     )
     // Whole seasons (results and fixtures) for league pages, club pages and form.
